@@ -110,8 +110,9 @@ class InternetEngine {
         Uri.http(localhost + ':8080', '/users/get/', {
         }),
         headers: <String, String>{
-          'Content-Type': "application/json; charset=UTF-8",
-          'x-auth-token': token
+          'Content-Type': "application/json",
+          'x-auth-token': token,
+          'Accept-Encoding': 'gzip, deflate, br'
         });
     if(response.statusCode == 403){
       return null;

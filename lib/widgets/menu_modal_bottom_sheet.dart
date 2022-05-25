@@ -121,12 +121,14 @@ class MenuModalBottomSheet {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(user.firstName + "/n" + user.lastName,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontFamily: 'Cera-Pro',
-                                      fontWeight: FontWeight.bold)),
+                              Flexible(
+                                child: Text(user.firstName + user.lastName,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontFamily: 'Cera-Pro',
+                                        fontWeight: FontWeight.bold)),
+                              ),
                               const Spacer(),
                               Expanded(
                                 child: SvgPicture.asset(

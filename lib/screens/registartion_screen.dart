@@ -294,7 +294,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 lastName: lastNameController.text,
                                 firstName: firstNameController.text,
                                 middleName: middleNameController.text,
-                                dateOfBirth: selectDate,
+                                birthdate: selectDate,
                                 seriesDriverLicense: "",
                                 numberDriverLicense: "",
                                 dateOfIssueDriverLicense: DateTime.now(),

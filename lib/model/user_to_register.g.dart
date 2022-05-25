@@ -12,18 +12,20 @@ UserToRegister _$UserToRegisterFromJson(Map<String, dynamic> json) =>
       lastName: json['lastName'] as String,
       firstName: json['firstName'] as String,
       middleName: json['middleName'] as String,
-      dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
-      seriesDriverLicense: json['seriesDriverLicense'] as String,
-      numberDriverLicense: json['numberDriverLicense'] as String,
-      dateOfIssueDriverLicense:
-          DateTime.parse(json['dateOfIssueDriverLicense'] as String),
-      issuedByDriverLicense: json['issuedByDriverLicense'] as String,
-      seriesPassport: json['seriesPassport'] as String,
-      numberPassport: json['numberPassport'] as String,
-      dateOfIssuePassport:
-          DateTime.parse(json['dateOfIssuePassport'] as String),
-      issuedByPassport: json['issuedByPassport'] as String,
-      password: json['password'] as String,
+      birthdate: DateTime.parse(json['birthdate'] as String),
+      seriesDriverLicense: json['seriesDriverLicense'] as String?,
+      numberDriverLicense: json['numberDriverLicense'] as String?,
+      dateOfIssueDriverLicense: json['dateOfIssueDriverLicense'] == null
+          ? null
+          : DateTime.parse(json['dateOfIssueDriverLicense'] as String),
+      issuedByDriverLicense: json['issuedByDriverLicense'] as String?,
+      seriesPassport: json['seriesPassport'] as String?,
+      numberPassport: json['numberPassport'] as String?,
+      dateOfIssuePassport: json['dateOfIssuePassport'] == null
+          ? null
+          : DateTime.parse(json['dateOfIssuePassport'] as String),
+      issuedByPassport: json['issuedByPassport'] as String?,
+      password: json['password'] as String?,
     );
 
 Map<String, dynamic> _$UserToRegisterToJson(UserToRegister instance) =>
@@ -32,15 +34,15 @@ Map<String, dynamic> _$UserToRegisterToJson(UserToRegister instance) =>
       'lastName': instance.lastName,
       'firstName': instance.firstName,
       'middleName': instance.middleName,
-      'dateOfBirth': instance.dateOfBirth.toIso8601String(),
+      'birthdate': instance.birthdate.toIso8601String(),
       'seriesDriverLicense': instance.seriesDriverLicense,
       'numberDriverLicense': instance.numberDriverLicense,
       'dateOfIssueDriverLicense':
-          instance.dateOfIssueDriverLicense.toIso8601String(),
+          instance.dateOfIssueDriverLicense?.toIso8601String(),
       'issuedByDriverLicense': instance.issuedByDriverLicense,
       'seriesPassport': instance.seriesPassport,
       'numberPassport': instance.numberPassport,
-      'dateOfIssuePassport': instance.dateOfIssuePassport.toIso8601String(),
+      'dateOfIssuePassport': instance.dateOfIssuePassport?.toIso8601String(),
       'issuedByPassport': instance.issuedByPassport,
       'password': instance.password,
     };

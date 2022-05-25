@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_to_register.g.dart';
@@ -9,7 +11,7 @@ class UserToRegister {
       required this.lastName,
       required this.firstName,
       required this.middleName,
-      required this.dateOfBirth,
+      required this.birthdate,
       required this.seriesDriverLicense,
       required this.numberDriverLicense,
       required this.dateOfIssueDriverLicense,
@@ -24,19 +26,23 @@ class UserToRegister {
   late String lastName;
   late String firstName;
   late String middleName;
-  late DateTime dateOfBirth;
-  late String seriesDriverLicense;
-  late String numberDriverLicense;
-  late DateTime dateOfIssueDriverLicense;
-  late String issuedByDriverLicense;
-  late String seriesPassport;
-  late String numberPassport;
-  late DateTime dateOfIssuePassport;
-  late String issuedByPassport;
-  late String password;
+  late DateTime birthdate;
+  late String? seriesDriverLicense;
+  late String? numberDriverLicense;
+  late DateTime? dateOfIssueDriverLicense;
+  late String? issuedByDriverLicense;
+  late String? seriesPassport;
+  late String? numberPassport;
+  late DateTime? dateOfIssuePassport;
+  late String? issuedByPassport;
+  late String? password;
 
-  factory UserToRegister.fromJson(Map<String, dynamic> data) =>
-      _$UserToRegisterFromJson(data);
+  factory UserToRegister.fromJson(Map<String, dynamic> data){
+    UserToRegister user =  _$UserToRegisterFromJson(data);
+    var first = utf8.encode(user.firstName);
+    user.firstName = utf8.decode(first);
+    return user;
+  }
 
   Map<String, dynamic> toJson() => _$UserToRegisterToJson(this);
 }

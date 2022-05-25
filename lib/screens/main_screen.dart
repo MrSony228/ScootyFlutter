@@ -358,7 +358,6 @@ class _MainScreenState extends State<MainScreen> {
           )
         ]));
   }
-
   Future<bool> setTransportOfParking() async {
     try {
       parking = (await MapHandler(mapController, parking)
