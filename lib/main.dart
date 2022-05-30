@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:scooty/model/local_storage.dart';
+import 'package:scooty/model/user_to_register.dart';
 import 'package:scooty/screens/main_screen.dart';
+import 'package:scooty/screens/passport_registartion.dart';
 import 'package:scooty/screens/start_screen.dart';
 
 String token = "";
@@ -20,9 +22,10 @@ void main()  async {
 }
 
 class MyApp extends StatelessWidget {
-     const MyApp({Key? key, token}) : super(key: key);
+  const MyApp({Key? key, token}) : super(key: key);
+
   @override
-   build(BuildContext context) {
+  build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Scooty',
@@ -59,11 +62,30 @@ class MyApp extends StatelessWidget {
     );
   }
 
-   Widget _getStartupScreen()   {
-      if (token != "") {
-        return MainScreen();
-      } else {
-        return const StartScreen();
-      }
+  Widget _getStartupScreen() {
+    if (token != "") {
+      return const MainScreen();
+    } else {
+      return const StartScreen();
     }
-}
+  }
+//   Widget _getStartupScreen()   {
+//     UserToRegister user = UserToRegister(
+//         email: 'emailController.text',
+//         lastName: 'lastNameController.text',
+//         firstName: 'firstNameController.text',
+//         middleName: 'middleNameController.text',
+//         birthdate: DateTime.now(),
+//         seriesDriverLicense: "",
+//         numberDriverLicense: "",
+//         dateOfIssueDriverLicense: DateTime.now(),
+//         issuedByDriverLicense: "",
+//         seriesPassport: "",
+//         numberPassport: "",
+//         dateOfIssuePassport: DateTime.now(),
+//         issuedByPassport: "",
+//         password: 'passwordController.text');
+//       return PassportRegistrationScreen(user: user);
+//     }
+// }
+     }

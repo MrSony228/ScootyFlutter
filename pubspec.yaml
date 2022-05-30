@@ -47,6 +47,8 @@ dependencies:
   qr_code_scanner: ^0.7.0
   mobile_scanner: ^1.0.0
   flutter_native_splash: ^2.1.6
+  mask_text_input_formatter: ^2.3.0
+  email_validator: ^2.0.1
 
 flutter_icons:
   android: true
@@ -83,6 +85,7 @@ flutter:
      - assets/images/vector.png
      - assets/images/scootyWallet.svg
      - assets/images/electric scooter profile view 2.png
+     - assets/text/license.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

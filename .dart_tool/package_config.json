@@ -152,6 +152,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "email_validator",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/email_validator-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0",
       "packageUri": "lib/",
@@ -370,6 +376,12 @@
     {
       "name": "logging",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/logging-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "mask_text_input_formatter",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/mask_text_input_formatter-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -752,7 +764,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-05-10T12:44:29.120763Z",
+  "generated": "2022-05-27T09:32:39.328396Z",
   "generator": "pub",
   "generatorVersion": "2.16.2"
 }

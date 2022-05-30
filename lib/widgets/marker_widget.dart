@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:scooty/widgets/filter_modal_bottom_sheet.dart';
 import 'package:scooty/widgets/menu_modal_bottom_sheet.dart';
 
-import '../screens/login_sreen.dart';
+import '../screens/login_screen.dart';
 import '../screens/registartion_screen.dart';
 
 class MarkerWidget extends StatefulWidget {

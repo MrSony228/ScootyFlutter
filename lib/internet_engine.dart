@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:scooty/model/bank_card.dart';
 import 'package:scooty/model/local_storage.dart';
 import 'package:scooty/model/parking_places.dart';
 import 'dart:convert';
@@ -28,10 +29,11 @@ class InternetEngine {
   }
 
   register(UserToRegister userToRegister) async {
-    http.Response response = await basePost('users', userToRegister.toJson());
+    http.Response response = await basePost('users/registration/', userToRegister.toJson());
     if (response.statusCode != 200) {
       return response.statusCode;
     }
+    return 200;
   }
 
   checkExist(String email) async {
@@ -52,7 +54,7 @@ class InternetEngine {
     if (response.statusCode == 200) {
       var headers = response.headers.values.elementAt(2);
       LocalStorage().saveToken(headers);
-      return true;
+      return response.statusCode;
     } else {
       return response.statusCode;
     }
@@ -118,5 +120,26 @@ class InternetEngine {
       return null;
     }
     return UserToRegister.fromJson(jsonDecode(response.body)) ;
+  }
+
+  Future<List<BankCards>>? getBankCards() async{
+    String token = "";
+    await LocalStorage().getToken().then((String result) {
+      token = result;
+    });
+    var response = await http.get(
+        Uri.http(localhost + ':8080', '/payment/get/', {
+        }),
+        headers: <String, String>{
+          'Content-Type': "application/json",
+          'x-auth-token': token,
+          'Accept-Encoding': 'gzip, deflate, br'
+        });
+    if(response.statusCode == 403){
+      null;
+    }
+    return (json.decode(response.body) as List)
+        .map((data) => BankCards.fromJson(data))
+        .toList();
   }
 }

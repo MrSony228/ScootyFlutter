@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ScootyTextField extends StatelessWidget {
 
   final String hint;
   final TextEditingController controller;
+  final MaskTextInputFormatter maskFormater;
 
 
-  const ScootyTextField(this.hint, this.controller);
+  const ScootyTextField(this.hint, this.controller, this.maskFormater);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      inputFormatters: [maskFormater],
       style: const TextStyle(color: Colors.black, fontSize: 17),
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(

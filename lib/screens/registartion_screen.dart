@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:scooty/internet_engine.dart';
 import 'package:scooty/model/user_to_register.dart';
 import 'package:scooty/screens/driver_licence_registration_screen.dart';
@@ -44,7 +46,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 alignment: Alignment.center,
                 child: Image.asset("assets/images/logo.png"),
               ),
-              SizedBox(
+             const SizedBox(
                 height: 20,
               ),
               Text("Привет", style: Theme.of(context).textTheme.subtitle1),
@@ -58,7 +60,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ScootyTextField("scooty@gmail.com", emailController),
+              ScootyTextField("scooty@gmail.com", emailController,
+                  MaskTextInputFormatter()),
               const SizedBox(
                 height: 20,
               ),
@@ -113,14 +116,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иванов", firstNameController),
+                        ScootyTextField("Иванов", firstNameController, MaskTextInputFormatter()),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 28,
                   ),
                   Expanded(
@@ -134,16 +137,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иван", lastNameController),
+                        ScootyTextField("Иван", lastNameController, MaskTextInputFormatter()),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -162,7 +165,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       const  SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иванович", middleNameController),
+                        ScootyTextField("Иванович", middleNameController, MaskTextInputFormatter()),
                       ],
                     ),
                   ),
@@ -183,7 +186,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                        const  SizedBox(
                           height: 20,
                         ),
-                        Container(
+                        SizedBox(
                           height: 48,
                           width: 250,
                           child: ElevatedButton(
@@ -197,10 +200,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 Future<void> _selectDate(
                                     BuildContext context) async {
                                   final DateTime? picked = await showDatePicker(
-                                    context: context,
+                                      context: context,
+                                    builder: (context, child) => Theme(
+                                      data: ThemeData().copyWith(
+                                        colorScheme: const ColorScheme.dark(
+                                          primary: Colors.yellow,
+                                          onPrimary: Colors.black,
+                                          surface: Colors.black,
+                                          onSurface: Colors.white,
+                                        ),
+                                        dialogBackgroundColor: Colors.black,
+                                      ),
+                                      child: child!,
+                                    ),
+
                                     initialDate: selectDate,
                                     firstDate: DateTime(1940, 8),
-                                    lastDate: DateTime(2101),
+                                    lastDate: DateTime(2110),
                                   );
                                   if (picked != null && picked != selectDate) {
                                     setState(() {
@@ -243,12 +259,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             builder: (context) {
                               return AlertDialog(
                                 backgroundColor: Colors.black,
-                                title: const Text("Ошибка"),
+                                title: const Text(
+                                  "Ошибка",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 content: const Text(
                                   "Заполните все поля",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
                                 ),
                                 actions: [
                                   ElevatedButton(
@@ -261,6 +279,83 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                         return;
                       }
+                      bool email = EmailValidator.validate(emailController.text);
+                      if(email == false)
+                        {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.black,
+                                  title: const Text("Ошибка", style: TextStyle(
+                                    color: Colors.white,
+                                  ),),
+                                  content: const Text(
+                                    "E-Mail введен не верно",
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Закрыть"))
+                                  ],
+                                );
+                              });
+                          return;
+                        }
+                      DateTime date = DateTime.now();
+                      if(selectDate.day == date.day &&
+                         selectDate.month == date.month &&
+                          selectDate.year == date.year)
+                        {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.black,
+                                  title: const Text("Ошибка", style: TextStyle(
+                                    color: Colors.white,
+                                  ),),
+                                  content: const Text(
+                                    "Дата рождения выбрана не верно",
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Закрыть"))
+                                  ],
+                                );
+                              });
+                          return;
+                        }
+                      var newDate = DateTime(date.year - selectDate.year, date.month - selectDate.month, date.day - selectDate.day);
+                      if(newDate.year<= 0016)
+                        {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.black,
+                                  title: const Text("Ошибка", style: TextStyle(
+                                    color: Colors.white,
+                                  ),),
+                                  content: const Text(
+                                    "Ваша дата рождения не соответствует лицензионному соглашению",
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Закрыть"))
+                                  ],
+                                );
+                              });
+                          return;
+                        }
                       InternetEngine()
                           .checkExist(emailController.text)
                           .then((value) {
