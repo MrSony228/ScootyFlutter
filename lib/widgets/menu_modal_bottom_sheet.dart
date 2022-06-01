@@ -89,36 +89,66 @@ class MenuModalBottomSheet {
                     Navigator.pop(context);
                   }),
                   DialogLine('Банковские карты', MdiIcons.creditCardOutline,
-                      () async{
-                      List<BankCards>? result = await InternetEngine().getBankCards();
-                      // if(result?.length == 0)
-                      //   {
-                      //     showDialog(
-                      //         context: context,
-                      //         builder: (context) {
-                      //           return AlertDialog(
-                      //             backgroundColor: Colors.black,
-                      //             title: const Text(
-                      //               "Ошибка",
-                      //               style: TextStyle(
-                      //                 color: Colors.white,
-                      //               ),
-                      //             ),
-                      //             content: const Text(
-                      //               "Заполните все поля",
-                      //             ),
-                      //             actions: [
-                      //               ElevatedButton(
-                      //                   onPressed: () {
-                      //                     Navigator.pop(context);
-                      //                   },
-                      //                   child: const Text("Закрыть"))
-                      //             ],
-                      //           );
-                      //         });
-                      //     return;
-                      //   }
-                      BankCards bankCard = result![0];
+                      () async {
+                    List<BankCards> result =
+                        await InternetEngine().getBankCards();
+                    if (result.isEmpty) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.black,
+
+                              // shape: RoundedRectangleBorder(
+                              //   borderRadius: BorderRadius.circular(6),
+                              //   side: const BorderSide(color: Colors.yellow),
+                              // ),
+                              title: const Text(
+                                "Ошибка",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              content: const Text(
+                                "У вас нет существующих банковских карт, хотите добавить новую?",
+                              ),
+                              actions: [
+                                Container(
+                                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 130,
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Да")),
+                                      ),
+                                  const  Spacer(),
+                                  SizedBox(
+                                    width: 130,
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.black,
+                                            onPrimary: Colors.yellow,
+                                            side: const BorderSide(
+                                                width: 2.0, color: Colors.yellow)),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Нет')),
+                                  )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                      return;
+                    }
+                    BankCards bankCard = result[0];
                     showModalBottomSheet(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
@@ -127,88 +157,97 @@ class MenuModalBottomSheet {
                         backgroundColor: Colors.black,
                         context: context,
                         builder: (context) {
-                          TextEditingController bankCardNumberController = TextEditingController();
-                          bankCardNumberController.text = bankCard.numberBankCard;
+                          TextEditingController bankCardNumberController =
+                              TextEditingController();
+                          bankCardNumberController.text =
+                              bankCard.numberBankCard;
                           DateTime selectDate = bankCard.cardDate;
-                          return StatefulBuilder(builder: (context, setModalState) {
-                            TextEditingController bankCardCVCController = TextEditingController();
-                            bankCardCVCController.text = bankCard.cvc.toString();
+                          return StatefulBuilder(
+                              builder: (context, setModalState) {
+                            TextEditingController bankCardCVCController =
+                                TextEditingController();
+                            bankCardCVCController.text =
+                                bankCard.cvc.toString();
                             return Container(
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height / 1.1,
+                                height:
+                                    MediaQuery.of(context).size.height / 1.1,
                                 padding:
-                                const EdgeInsets.only(left: 16, right: 16),
-                                child: ListView(
-                                    children: [Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Center(
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                                color: Colors.white,
-                                              ),
-                                              height: 3,
-                                              width: 60,
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                child: ListView(children: [
+                                  Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20)),
+                                              color: Colors.white,
                                             ),
+                                            height: 3,
+                                            width: 60,
                                           ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          const Text(
-                                            "Управление банковской картой",
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                          const SizedBox(height: 16,),
-                                          Container(
-                                            height: 200,
-                                            padding: const EdgeInsets.all(24),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius
-                                                    .circular(10),
-                                                color: Colors.yellow,
-                                                image: DecorationImage(
-                                                    image: const AssetImage(
-                                                      "assets/images/vector.png",
-                                                    ),
-                                                    alignment: Alignment
-                                                        .centerRight,
-                                                    colorFilter: ColorFilter
-                                                        .mode(
-                                                        Colors.yellow
-                                                            .withOpacity(0.08),
-                                                        BlendMode.dstATop))),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                SizedBox(
-                                                  width: double.infinity,
-                                                  child: SvgPicture.asset(
-                                                    'assets/images/scootyWallet.svg',
-                                                    alignment: Alignment
-                                                        .topRight,
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        const Text(
+                                          "Управление банковской картой",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Container(
+                                          height: 200,
+                                          padding: const EdgeInsets.all(24),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.yellow,
+                                              image: DecorationImage(
+                                                  image: const AssetImage(
+                                                    "assets/images/vector.png",
                                                   ),
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Colors.yellow
+                                                          .withOpacity(0.08),
+                                                      BlendMode.dstATop))),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: SvgPicture.asset(
+                                                  'assets/images/scootyWallet.svg',
+                                                  alignment: Alignment.topRight,
                                                 ),
-                                                const SizedBox(height: 16,),
-                                                Row(
-                                                  children:[ SizedBox( width: 170,
-                                                    child: ScootyTextField(
-                                                        "4276 5900 1776 3508",
-                                                        bankCardNumberController,
-                                                        MaskTextInputFormatter(
-                                                            mask: '#### #### #### ####',
-                                                            filter: {
-                                                              "#": RegExp(r'[0-9]')
-                                                            },
-                                                            type: MaskAutoCompletionType
-                                                                .lazy)),
-                                                  ),
+                                              ),
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                              Row(children: [
+                                                SizedBox(
+                                                  width: 170,
+                                                  child: ScootyTextField(
+                                                      "4276 5900 1776 3508",
+                                                      bankCardNumberController,
+                                                      MaskTextInputFormatter(
+                                                          mask:
+                                                              '#### #### #### ####',
+                                                          filter: {
+                                                            "#":
+                                                                RegExp(r'[0-9]')
+                                                          },
+                                                          type:
+                                                              MaskAutoCompletionType
+                                                                  .lazy)),
+                                                ),
                                                 const Spacer(),
                                                 SizedBox(
                                                   height: 48,
@@ -216,46 +255,58 @@ class MenuModalBottomSheet {
                                                   child: ElevatedButton(
                                                       style: ElevatedButton
                                                           .styleFrom(
-                                                        shadowColor: Colors.transparent,
-                                                          primary: Colors.white,
-                                                          onPrimary: Colors
-                                                              .white,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius
-                                                                .circular(7.0),
-                                                          )),
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              primary:
+                                                                  Colors.white,
+                                                              onPrimary:
+                                                                  Colors.white,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7.0),
+                                                              )),
                                                       onPressed: () {
-                                                        Future<
-                                                            void> _selectDate(
-                                                            BuildContext context) async {
-                                                          final DateTime? picked = await showDatePicker(
+                                                        Future<void> _selectDate(
+                                                            BuildContext
+                                                                context) async {
+                                                          final DateTime?
+                                                              picked =
+                                                              await showDatePicker(
                                                             context: context,
                                                             builder: (context,
-                                                                child) =>
+                                                                    child) =>
                                                                 Theme(
-                                                                  data: ThemeData()
-                                                                      .copyWith(
-                                                                    colorScheme: const ColorScheme
+                                                              data: ThemeData()
+                                                                  .copyWith(
+                                                                colorScheme:
+                                                                    const ColorScheme
                                                                         .dark(
-                                                                      primary: Colors
-                                                                          .yellow,
-                                                                      onPrimary: Colors
+                                                                  primary: Colors
+                                                                      .yellow,
+                                                                  onPrimary:
+                                                                      Colors
                                                                           .black,
-                                                                      surface: Colors
-                                                                          .black,
-                                                                      onSurface: Colors
+                                                                  surface: Colors
+                                                                      .black,
+                                                                  onSurface:
+                                                                      Colors
                                                                           .white,
-                                                                    ),
-                                                                    dialogBackgroundColor: Colors
-                                                                        .black,
-                                                                  ),
-                                                                  child: child!,
                                                                 ),
-                                                            initialDate: selectDate,
+                                                                dialogBackgroundColor:
+                                                                    Colors
+                                                                        .black,
+                                                              ),
+                                                              child: child!,
+                                                            ),
+                                                            initialDate:
+                                                                selectDate,
                                                             firstDate: DateTime(
                                                                 1940, 8),
-                                                            lastDate: DateTime(
-                                                                2110),
+                                                            lastDate:
+                                                                DateTime(2110),
                                                           );
                                                           if (picked != null &&
                                                               picked !=
@@ -270,59 +321,79 @@ class MenuModalBottomSheet {
                                                         _selectDate(context);
                                                       },
                                                       child: Text(
-                                                        "${selectDate
-                                                            .toLocal()}".split(
-                                                            ' ')[0],
+                                                        "${selectDate.toLocal()}"
+                                                            .split(' ')[0],
                                                         style: const TextStyle(
-                                                            color: Color
-                                                                .fromRGBO(
-                                                                101, 101, 101,
-                                                                1),
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    101,
+                                                                    101,
+                                                                    101,
+                                                                    1),
                                                             fontSize: 17),
-                                                        textAlign: TextAlign
-                                                            .left,
+                                                        textAlign:
+                                                            TextAlign.left,
                                                       )),
-                                                ),]),
-                                                const SizedBox(height: 16,),
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      alignment: Alignment
-                                                          .bottomLeft,
-                                                      child: Text(
-                                                          user.firstName +
-                                                              " " +
-                                                              user.lastName,
-                                                          style: const TextStyle(
-                                                              color: Colors
-                                                                  .black,
-                                                              fontSize: 20,
-                                                              fontFamily: 'Cera-Pro',
-                                                              fontWeight: FontWeight
-                                                                  .bold)),
-                                                    ),
-                                                    const Spacer(),
-                                                    SizedBox( width: 45,
-                                                      child: ScootyTextField(
-                                                          "123",
-                                                          bankCardCVCController,
-                                                          MaskTextInputFormatter(
-                                                              mask: '###',
-                                                              filter: {
-                                                                "#": RegExp(r'[0-9]')
-                                                              },
-                                                              type: MaskAutoCompletionType
-                                                                  .lazy)),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+                                                ),
+                                              ]),
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.bottomLeft,
+                                                    child: Text(
+                                                        user.firstName +
+                                                            " " +
+                                                            user.lastName,
+                                                        style: const TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 20,
+                                                            fontFamily:
+                                                                'Cera-Pro',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  ),
+                                                  const Spacer(),
+                                                  SizedBox(
+                                                    width: 45,
+                                                    child: ScootyTextField(
+                                                        "123",
+                                                        bankCardCVCController,
+                                                        MaskTextInputFormatter(
+                                                            mask: '###',
+                                                            filter: {
+                                                              "#": RegExp(
+                                                                  r'[0-9]')
+                                                            },
+                                                            type:
+                                                                MaskAutoCompletionType
+                                                                    .lazy)),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                          const SizedBox(height: 16,),
-                                          SizedBox( width: double.infinity, child: ElevatedButton( onPressed: (){}, child: const Text('Сохранить')))
-                                        ]),
-                                    ]));
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: Colors.black,
+                                                    onPrimary: Colors.yellow,
+                                                    side: const BorderSide(
+                                                        width: 2.0,
+                                                        color: Colors.yellow)),
+                                                onPressed: () {},
+                                                child: const Text('Сохранить')))
+                                      ]),
+                                ]));
                           });
                         });
                   }),

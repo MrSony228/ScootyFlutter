@@ -122,7 +122,7 @@ class InternetEngine {
     return UserToRegister.fromJson(jsonDecode(response.body)) ;
   }
 
-  Future<List<BankCards>>? getBankCards() async{
+  Future<List<BankCards>> getBankCards() async{
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
@@ -136,7 +136,10 @@ class InternetEngine {
           'Accept-Encoding': 'gzip, deflate, br'
         });
     if(response.statusCode == 403){
-      null;
+      return List<BankCards>.empty();
+    }
+    if(response.body.isEmpty){
+      return List<BankCards>.empty();
     }
     return (json.decode(response.body) as List)
         .map((data) => BankCards.fromJson(data))

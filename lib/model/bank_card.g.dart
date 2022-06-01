@@ -9,7 +9,7 @@ part of 'bank_card.dart';
 BankCards _$BankCardsFromJson(Map<String, dynamic> json) => BankCards(
       numberBankCard: json['numberBankCard'] as String,
       cardDate: DateTime.parse(json['cardDate'] as String),
-      cvc: json['cvc'] as int,
+      cvc: json['cardCvc'] as int,
       userId: json['userId'] as int,
     );
 
