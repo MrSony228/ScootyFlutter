@@ -15,6 +15,8 @@ Transport _$TransportFromJson(Map<String, dynamic> json) => Transport(
       manufacturer: json['manufacturer'] as String,
       free: json['free'] as bool,
       price: json['price'] as int,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$TransportToJson(Transport instance) => <String, dynamic>{
@@ -26,4 +28,6 @@ Map<String, dynamic> _$TransportToJson(Transport instance) => <String, dynamic>{
       'manufacturer': instance.manufacturer,
       'price': instance.price,
       'free': instance.free,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };

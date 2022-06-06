@@ -6,16 +6,16 @@ part of 'bank_card.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BankCards _$BankCardsFromJson(Map<String, dynamic> json) => BankCards(
+BankCard _$BankCardFromJson(Map<String, dynamic> json) => BankCard(
       numberBankCard: json['numberBankCard'] as String,
       cardDate: DateTime.parse(json['cardDate'] as String),
-      cvc: json['cardCvc'] as int,
+      cardCvc: json['cardCvc'] as int,
       userId: json['userId'] as int,
     );
 
-Map<String, dynamic> _$BankCardsToJson(BankCards instance) => <String, dynamic>{
+Map<String, dynamic> _$BankCardToJson(BankCard instance) => <String, dynamic>{
       'numberBankCard': instance.numberBankCard,
-      'cardDate': instance.cardDate.toIso8601String(),
-      'cvc': instance.cvc,
+      'cardDate': instance.cardDate.toIso8601String().substring(0,10),
+      'cardCvc': instance.cardCvc,
       'userId': instance.userId,
     };

@@ -5,22 +5,22 @@ part 'bank_card.g.dart';
 
 
 @JsonSerializable()
- class BankCards{
+ class BankCard{
 
-  BankCards({
+  BankCard({
     required this.numberBankCard,
     required this.cardDate,
-    required this.cvc,
+    required this.cardCvc,
     required this.userId
 });
 
   late String numberBankCard;
   late DateTime cardDate;
-  late int cvc;
+  late int cardCvc;
   late int userId;
 
-  factory BankCards.fromJson(Map<String, dynamic> data) =>
-      _$BankCardsFromJson(data);
+  factory BankCard.fromJson(Map<String, dynamic> data) =>
+      _$BankCardFromJson(data);
 
-  Map<String, dynamic> toJson() => _$BankCardsToJson(this);
+  Map<String, dynamic> toJson() => _$BankCardToJson(this);
 }

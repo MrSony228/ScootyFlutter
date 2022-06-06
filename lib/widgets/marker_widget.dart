@@ -20,8 +20,10 @@ class _MarkerWidget extends State<MarkerWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      width: 100,
+      height: 100,
       child: IconButton(
-          onPressed: () {}, icon: const Icon(MdiIcons.scooterElectric, size:40 ,)),
+          onPressed: () {}, icon: const Icon(MdiIcons.scooterElectric, size:95 , color: Color.fromRGBO(0, 0, 255, 1),)),
     );
   }
 }

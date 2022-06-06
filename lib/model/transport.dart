@@ -12,7 +12,9 @@ class Transport {
       required this.mileage,
       required this.manufacturer,
       required this.free,
-      required this.price});
+      required this.price,
+      required this.latitude,
+      required this.longitude});
 
   late int id;
   late String name;
@@ -22,6 +24,8 @@ class Transport {
   late String manufacturer;
   late int price;
   late bool free;
+  late double latitude;
+  late double longitude;
 
   factory Transport.fromJson(Map<String, dynamic> data) =>
       _$TransportFromJson(data);

@@ -129,7 +129,7 @@ class MapHandler extends StatelessWidget {
           position = await _determinePosition();
         },
         onLocationChanged: (GeoPoint geoPoint) async {
-          await mapController.currentLocation();
+        //  await mapController.currentLocation();
         },
         onGeoPointClicked: (GeoPoint geoPoint) async {
           double distance = 0;
@@ -278,7 +278,7 @@ class MapHandler extends StatelessWidget {
                                     ]),
                               ),
                             ),
-                            // const Spacer(),
+                             const Spacer(),
                             Column(
                               children: [
                                 SizedBox(
@@ -290,7 +290,9 @@ class MapHandler extends StatelessWidget {
                                   height: 22,
                                 ),
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+
+                                    },
                                     child: const Text(
                                       'Забронировать',
                                     )),
@@ -309,14 +311,15 @@ class MapHandler extends StatelessWidget {
           personMarker: const MarkerIcon(
             icon: Icon(
               MdiIcons.circleSmall,
-              color: Color(0xff0014c4),
-              size: 70,
+              color: Colors.transparent,
+              size: 0,
             ),
           ),
           directionArrowMarker: const MarkerIcon(
             icon: Icon(
               Icons.double_arrow,
-              size: 1,
+              color: Color(0xff0014c4),
+              size: 170,
             ),
           ),
         ),

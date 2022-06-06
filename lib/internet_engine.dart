@@ -13,11 +13,16 @@ const String localhost = "192.168.3.42";
 
 class InternetEngine {
   Future<http.Response> basePost(String url, Map<String, dynamic> json) async {
-    return http.post(Uri.parse('http://'  + localhost + ':8080/' + url),
+    String token = "";
+    await LocalStorage().getToken().then((String result) {
+      token = result;
+    });
+    return http.post(Uri.parse('http://' + localhost + ':8080/' + url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Accept": "application/json",
-  },
+          'x-auth-token': token,
+        },
         body: jsonEncode(json));
   }
 
@@ -29,7 +34,8 @@ class InternetEngine {
   }
 
   register(UserToRegister userToRegister) async {
-    http.Response response = await basePost('users/registration/', userToRegister.toJson());
+    http.Response response =
+        await basePost('users/registration/', userToRegister.toJson());
     if (response.statusCode != 200) {
       return response.statusCode;
     }
@@ -77,17 +83,16 @@ class InternetEngine {
           'Content-Type': "application/json; charset=UTF-8",
           'x-auth-token': token
         });
-    if(response.statusCode != 403) {
+    if (response.statusCode != 403) {
       return (json.decode(response.body) as List)
           .map((data) => ParkingPlaces.fromJson(data))
           .toList();
+    } else {
+      return null;
     }
-    else
-      {
-        return null;
-      }
   }
-  Future<Transport> getTransportByQrCode(String qrCode) async{
+
+  Future<Transport> getTransportByQrCode(String qrCode) async {
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
@@ -100,49 +105,95 @@ class InternetEngine {
           'Content-Type': "application/json; charset=UTF-8",
           'x-auth-token': token
         });
-    return Transport.fromJson(jsonDecode(response.body)) ;
+    return Transport.fromJson(jsonDecode(response.body));
   }
 
-  Future<UserToRegister?> getUser() async{
+  Future<UserToRegister?> getUser() async {
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
     });
     var response = await http.get(
-        Uri.http(localhost + ':8080', '/users/get/', {
-        }),
+        Uri.http(localhost + ':8080', '/users/get/', {}),
         headers: <String, String>{
           'Content-Type': "application/json",
           'x-auth-token': token,
           'Accept-Encoding': 'gzip, deflate, br'
         });
-    if(response.statusCode == 403){
+    if (response.statusCode == 403) {
       return null;
     }
-    return UserToRegister.fromJson(jsonDecode(response.body)) ;
+    return UserToRegister.fromJson(jsonDecode(response.body));
   }
 
-  Future<List<BankCards>> getBankCards() async{
+  Future<List<BankCard>> getBankCards() async {
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
     });
     var response = await http.get(
-        Uri.http(localhost + ':8080', '/payment/get/', {
-        }),
+        Uri.http(localhost + ':8080', '/payment/get/', {}),
         headers: <String, String>{
           'Content-Type': "application/json",
           'x-auth-token': token,
           'Accept-Encoding': 'gzip, deflate, br'
         });
-    if(response.statusCode == 403){
-      return List<BankCards>.empty();
+    if (response.statusCode == 403) {
+      return List<BankCard>.empty();
     }
-    if(response.body.isEmpty){
-      return List<BankCards>.empty();
+    if (response.body.isEmpty) {
+      return List<BankCard>.empty();
     }
     return (json.decode(response.body) as List)
-        .map((data) => BankCards.fromJson(data))
+        .map((data) => BankCard.fromJson(data))
         .toList();
+  }
+
+  Future<bool> addBankCards(BankCard bankCard) async {
+    http.Response response = await basePost('payment/add', bankCard.toJson());
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> editBankCard(BankCard bankCard) async {
+    String token = "";
+    await LocalStorage().getToken().then((String result) {
+      token = result;
+    });
+    http.Response response = await http.put(Uri.parse('http://' + localhost + ':8080/payment/put'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Accept": "application/json",
+          'x-auth-token': token,
+        },
+        body: jsonEncode(bankCard.toJson()));
+    if(response.statusCode != 200){
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  Future<bool> deleteBankCard(BankCard bankCard) async{
+    String token = "";
+    await LocalStorage().getToken().then((String result) {
+      token = result;
+    });
+    http.Response response = await http.delete(Uri.parse('http://' + localhost + ':8080/payment/deleteCard'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Accept": "application/json",
+          'x-auth-token': token,
+        },
+        body: jsonEncode(bankCard.toJson()));
+    if(response.statusCode != 200){
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 }

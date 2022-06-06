@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scooty/model/transport.dart';
@@ -52,9 +52,9 @@ class _MainScreenState extends State<MainScreen> {
     return updatedDt.toString();
   }
 
-  IconData getBatteryLevelIcon(int batteryLevel){
-    double n = batteryLevel/10;
-    switch(n.toInt()) {
+  IconData getBatteryLevelIcon(int batteryLevel) {
+    double n = batteryLevel / 10;
+    switch (n.toInt()) {
       case 1:
         return MdiIcons.batteryCharging10;
       case 2:
@@ -78,9 +78,29 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    // LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
   double _batteryLevel = 30;
   double _maxDist = 500;
-  Transport selectTransport = Transport(mileage: 0, free: true, price: 0, batteryLevel: 0, id: 0, manufacturer: '', description: '', name: '');
+  Transport selectTransport = Transport(
+      mileage: 0,
+      free: true,
+      price: 0,
+      batteryLevel: 0,
+      id: 0,
+      manufacturer: '',
+      description: '',
+      name: '',
+      latitude: 0,
+      longitude: 0);
 
   @override
   void initState() {
@@ -88,7 +108,8 @@ class _MainScreenState extends State<MainScreen> {
     setTransportOfParking().then((result) {
       if (result = false) {}
     });
-        }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,8 +130,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 leading: IconButton(
                   icon: const Icon(CustomIcons.menu),
-                  onPressed: () {
-                    MenuModalBottomSheet(context).show();
+                  onPressed: () async {
+                    await MenuModalBottomSheet(context).show();
                   },
                 ),
                 actions: [
@@ -182,7 +203,7 @@ class _MainScreenState extends State<MainScreen> {
                     width: double.infinity,
                     height: 45,
                     child: ElevatedButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -191,8 +212,20 @@ class _MainScreenState extends State<MainScreen> {
                           setState(() {
                             selectTransport = result;
                           });
-                          if(selectTransport.id != 0){
+
+                          Position position = await _determinePosition();
+
+                          var distance = await distance2point(
+                              GeoPoint(
+                                  latitude: position.latitude.toDouble(),
+                                  longitude: position.longitude),
+                              GeoPoint(
+                                  latitude: selectTransport.latitude,
+                                  longitude: selectTransport.longitude));
+
+                          if (selectTransport.id != 0) {
                             showModalBottomSheet(
+
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
@@ -200,149 +233,204 @@ class _MainScreenState extends State<MainScreen> {
                                 backgroundColor: Colors.black,
                                 context: context,
                                 builder: (context) {
-                                  return StatefulBuilder(builder: (context, setModalState) {
+                                  return StatefulBuilder(
+                                      builder: (context, setModalState) {
                                     return Container(
-                                        padding: const EdgeInsets.only(left: 16, right: 16),
-                                        child: Column(mainAxisSize: MainAxisSize.min, children: <
-                                            Widget>[
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Center(
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(20)),
-                                                color: Colors.white,
+                                        padding: const EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                height: 16,
                                               ),
-                                              height: 3,
-                                              width: 60,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Container(
-                                                height: MediaQuery.of(context).size.height / 3,
-                                                padding:
-                                                const EdgeInsets.only(left: 16, right: 16),
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          selectTransport.manufacturer,
-                                                          textAlign: TextAlign.left,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .subtitle1,
-                                                        ),
-                                                        const SizedBox(height: 5,),
-                                                        Text(
-                                                          selectTransport.name,
-                                                          style: Theme.of(context)
-                                                              .textTheme
-                                                              .subtitle1,
-                                                        ),
-                                                        const SizedBox(height: 8,),
-                                                        Row(
-                                                          children: [
-                                                            const Icon(
-                                                              MdiIcons.clockTimeThreeOutline,
-                                                              color: Colors.yellow,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            Text(
-                                                              "Сегодня в " + dateFormat(),
-                                                              style:
-                                                              const TextStyle(fontFamily: ""),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        const SizedBox(height: 8,),
-                                                        Row(children: const [
-                                                          Icon(
-                                                            MdiIcons.mapMarkerOutline,
-                                                            color: Colors.yellow,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          // Text(
-                                                          //   distance.toInt().toString() +
-                                                          //       convertDistance(distance, " метр",
-                                                          //           " метра", " метров"),
-                                                          //   style:
-                                                          //   const TextStyle(fontFamily: ""),
-                                                          // )
-                                                        ]),
-                                                        const SizedBox(height: 8,),
-                                                        Row(children: [
-                                                          const Icon(
-                                                            MdiIcons.currencyRub,
-                                                            color: Colors.yellow,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          Text(
-                                                            selectTransport.price.toString() +
-                                                                "р  в минуту",
-                                                            style:
-                                                            const TextStyle(fontFamily: ""),
-                                                          )
-                                                        ]),
-                                                        const SizedBox(height: 8,),
-                                                        Row(children: [
-                                                          const SizedBox(width: 4,),
-                                                          Icon(
-                                                            getBatteryLevelIcon(selectTransport.batteryLevel),
-                                                            color: Colors.yellow,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          Text(
-                                                            selectTransport.batteryLevel.toString() +
-                                                                " %",
-                                                            style:
-                                                            const TextStyle(fontFamily: ""),
-                                                          )
-                                                        ]),
-                                                      ]),
+                                              Center(
+                                                child: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                    color: Colors.white,
+                                                  ),
+                                                  height: 3,
+                                                  width: 60,
                                                 ),
                                               ),
-                                              // const Spacer(),
-                                              Column(
+                                              const SizedBox(
+                                                height: 16,
+                                              ),
+                                              Row(
                                                 children: [
-                                                  SizedBox(
-                                                      width: 192,
-                                                      height: 202,
-                                                      child: Image.asset(
-                                                          'assets/images/electric scooter profile view 2.png')),
-                                                  const SizedBox(
-                                                    height: 22,
+                                                  Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            3,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 16,
+                                                            right: 16),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              selectTransport
+                                                                  .manufacturer,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .subtitle1,
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Text(
+                                                              selectTransport
+                                                                  .name,
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .subtitle1,
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  MdiIcons
+                                                                      .clockTimeThreeOutline,
+                                                                  color: Colors
+                                                                      .yellow,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Text(
+                                                                  "Сегодня в " +
+                                                                      dateFormat(),
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          ""),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            Row(children:  [
+                                                             const Icon(
+                                                                MdiIcons
+                                                                    .mapMarkerOutline,
+                                                                color: Colors
+                                                                    .yellow,
+                                                              ),
+                                                             const SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Text(
+                                                                  distance.toInt().toString() +
+                                                                      convertDistance(distance, " метр",
+                                                                          " метра", " метров"),
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        ""),
+                                                              )
+                                                            ]),
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            Row(children: [
+                                                              const Icon(
+                                                                MdiIcons
+                                                                    .currencyRub,
+                                                                color: Colors
+                                                                    .yellow,
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Text(
+                                                                selectTransport
+                                                                        .price
+                                                                        .toString() +
+                                                                    "р  в минуту",
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        ""),
+                                                              )
+                                                            ]),
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            Row(children: [
+                                                              const SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Icon(
+                                                                getBatteryLevelIcon(
+                                                                    selectTransport
+                                                                        .batteryLevel),
+                                                                color: Colors
+                                                                    .yellow,
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Text(
+                                                                selectTransport
+                                                                        .batteryLevel
+                                                                        .toString() +
+                                                                    " %",
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        ""),
+                                                              )
+                                                            ]),
+                                                          ]),
+                                                    ),
                                                   ),
-                                                  ElevatedButton(
-                                                      onPressed: () {},
-                                                      child: const Text(
-                                                        'Начать поездку',
-                                                      )),
-                                                  const SizedBox(
-                                                    height: 42,
-                                                  ),
+                                                  const Spacer(),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                          width: 192,
+                                                          height: 202,
+                                                          child: Image.asset(
+                                                              'assets/images/electric scooter profile view 2.png')),
+                                                      const SizedBox(
+                                                        height: 22,
+                                                      ),
+                                                      ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+
+                                                          },
+                                                          child: const Text(
+                                                            'Начать поездку',
+                                                          )),
+                                                      const SizedBox(
+                                                        height: 42,
+                                                      ),
+                                                    ],
+                                                  )
                                                 ],
-                                              )
-                                            ],
-                                          ),
-                                        ]));
+                                              ),
+                                            ]));
                                   });
                                 });
                           }
@@ -358,6 +446,7 @@ class _MainScreenState extends State<MainScreen> {
           )
         ]));
   }
+
   Future<bool> setTransportOfParking() async {
     try {
       parking = (await MapHandler(mapController, parking)
@@ -366,7 +455,7 @@ class _MainScreenState extends State<MainScreen> {
         return false;
       }
       return true;
-    }catch(set){
+    } catch (set) {
       return false;
     }
   }
