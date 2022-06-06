@@ -34,8 +34,13 @@ class InternetEngine {
   }
 
   register(UserToRegister userToRegister) async {
-    http.Response response =
-        await basePost('users/registration/', userToRegister.toJson());
+    http.Response response = await http.post(
+        Uri.parse('http://' + localhost + ':8080/' + 'users/registration/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Accept": "application/json",
+        },
+        body: jsonEncode(userToRegister.toJson()));
     if (response.statusCode != 200) {
       return response.statusCode;
     }
@@ -163,36 +168,37 @@ class InternetEngine {
     await LocalStorage().getToken().then((String result) {
       token = result;
     });
-    http.Response response = await http.put(Uri.parse('http://' + localhost + ':8080/payment/put'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Accept": "application/json",
-          'x-auth-token': token,
-        },
-        body: jsonEncode(bankCard.toJson()));
-    if(response.statusCode != 200){
+    http.Response response =
+        await http.put(Uri.parse('http://' + localhost + ':8080/payment/put'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              "Accept": "application/json",
+              'x-auth-token': token,
+            },
+            body: jsonEncode(bankCard.toJson()));
+    if (response.statusCode != 200) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
-  Future<bool> deleteBankCard(BankCard bankCard) async{
+
+  Future<bool> deleteBankCard(BankCard bankCard) async {
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
     });
-    http.Response response = await http.delete(Uri.parse('http://' + localhost + ':8080/payment/deleteCard'),
+    http.Response response = await http.delete(
+        Uri.parse('http://' + localhost + ':8080/payment/deleteCard'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Accept": "application/json",
           'x-auth-token': token,
         },
         body: jsonEncode(bankCard.toJson()));
-    if(response.statusCode != 200){
+    if (response.statusCode != 200) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }

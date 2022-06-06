@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:scooty/internet_engine.dart';
 import 'package:scooty/model/user_to_register.dart';
+import 'package:scooty/screens/main_screen.dart';
 import 'package:scooty/widgets/scooty_text_field.dart';
 
 class PassportRegistrationScreen extends StatefulWidget {
@@ -342,13 +343,12 @@ class _PassportRegistrationScreenState
                         return;
                       }
 
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) =>
-                      //          EmailConfirmationScreen(user: widget.user,)),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                               MainScreen()),
+                      );
                     },
                     child: const Text(
                       'Продолжить',

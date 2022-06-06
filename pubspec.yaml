@@ -86,6 +86,7 @@ flutter:
      - assets/images/scootyWallet.svg
      - assets/images/electric scooter profile view 2.png
      - assets/text/license.txt
+     - android/app/src/main/res/drawable/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -134,6 +135,7 @@ flutter_native_splash:
   # The image parameter allows you to specify an image used in the splash screen.  It must be a
   # png file and should be sized for 4x pixel density.
   image: assets/images/logo.png
+
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. Currently, it is only supported for Android < v12 and iOS.

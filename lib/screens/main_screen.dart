@@ -1,15 +1,21 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:scooty/internet_engine.dart';
 import 'package:scooty/model/transport.dart';
+import 'package:scooty/model/user_to_register.dart';
 import 'package:scooty/presentation/custom_icons_icons.dart';
 import 'package:scooty/screens/qr-code_scanner.dart';
 import 'package:scooty/widgets/filter_modal_bottom_sheet.dart';
 import 'package:scooty/widgets/map_handler.dart';
 import 'package:scooty/widgets/menu_modal_bottom_sheet.dart';
+import '../model/bank_card.dart';
 import '../model/parking_places.dart';
+import '../widgets/bank_card_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -113,11 +119,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .backgroundColor,
         body: Stack(children: [
           MapHandler(mapController, parking),
           SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: 80,
               child: AppBar(
                 backgroundColor: Colors.transparent,
@@ -139,7 +150,7 @@ class _MainScreenState extends State<MainScreen> {
                     icon: const Icon(CustomIcons.filter),
                     onPressed: () {
                       FilterModalBottomSheet(context, _batteryLevel, _maxDist,
-                              parking, mapController)
+                          parking, mapController)
                           .show();
                     },
                   )
@@ -150,26 +161,35 @@ class _MainScreenState extends State<MainScreen> {
             heightFactor: double.infinity,
             alignment: Alignment.bottomCenter,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: 145,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [
-                  0.0,
-                  2.0,
-                ],
-                colors: [
-                  Colors.transparent,
-                  Colors.black,
-                ],
-              )),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [
+                      0.0,
+                      2.0,
+                    ],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black,
+                    ],
+                  )),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
             padding: const EdgeInsets.all(16),
             child: Center(
               child: Column(
@@ -208,7 +228,7 @@ class _MainScreenState extends State<MainScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const QrCodeScannerScreen()));
+                                  const QrCodeScannerScreen()));
                           setState(() {
                             selectTransport = result;
                           });
@@ -225,7 +245,6 @@ class _MainScreenState extends State<MainScreen> {
 
                           if (selectTransport.id != 0) {
                             showModalBottomSheet(
-
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
@@ -235,203 +254,557 @@ class _MainScreenState extends State<MainScreen> {
                                 builder: (context) {
                                   return StatefulBuilder(
                                       builder: (context, setModalState) {
-                                    return Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 16, right: 16),
-                                        child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              Center(
-                                                child: Container(
-                                                  decoration:
+                                        return Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 16, right: 16),
+                                            child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  const SizedBox(
+                                                    height: 16,
+                                                  ),
+                                                  Center(
+                                                    child: Container(
+                                                      decoration:
                                                       const BoxDecoration(
-                                                    borderRadius:
+                                                        borderRadius:
                                                         BorderRadius.all(
                                                             Radius.circular(
                                                                 20)),
-                                                    color: Colors.white,
+                                                        color: Colors.white,
+                                                      ),
+                                                      height: 3,
+                                                      width: 60,
+                                                    ),
                                                   ),
-                                                  height: 3,
-                                                  width: 60,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height /
+                                                  const SizedBox(
+                                                    height: 16,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                        MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .height /
                                                             3,
-                                                    padding:
+                                                        padding:
                                                         const EdgeInsets.only(
                                                             left: 16,
                                                             right: 16),
-                                                    child: Align(
-                                                      alignment:
+                                                        child: Align(
+                                                          alignment:
                                                           Alignment.centerLeft,
-                                                      child: Column(
-                                                          crossAxisAlignment:
+                                                          child: Column(
+                                                              crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
-                                                          mainAxisAlignment:
+                                                              mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
-                                                          children: [
-                                                            Text(
-                                                              selectTransport
-                                                                  .manufacturer,
-                                                              textAlign:
+                                                              children: [
+                                                                Text(
+                                                                  selectTransport
+                                                                      .manufacturer,
+                                                                  textAlign:
                                                                   TextAlign
                                                                       .left,
-                                                              style: Theme.of(
+                                                                  style: Theme
+                                                                      .of(
                                                                       context)
-                                                                  .textTheme
-                                                                  .subtitle1,
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Text(
-                                                              selectTransport
-                                                                  .name,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .subtitle1,
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 8,
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                const Icon(
-                                                                  MdiIcons
-                                                                      .clockTimeThreeOutline,
-                                                                  color: Colors
-                                                                      .yellow,
+                                                                      .textTheme
+                                                                      .subtitle1,
                                                                 ),
                                                                 const SizedBox(
-                                                                  width: 4,
+                                                                  height: 5,
                                                                 ),
                                                                 Text(
-                                                                  "Сегодня в " +
-                                                                      dateFormat(),
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
+                                                                  selectTransport
+                                                                      .name,
+                                                                  style: Theme
+                                                                      .of(
+                                                                      context)
+                                                                      .textTheme
+                                                                      .subtitle1,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    const Icon(
+                                                                      MdiIcons
+                                                                          .clockTimeThreeOutline,
+                                                                      color: Colors
+                                                                          .yellow,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 4,
+                                                                    ),
+                                                                    Text(
+                                                                      "Сегодня в " +
+                                                                          dateFormat(),
+                                                                      style: const TextStyle(
+                                                                          fontFamily:
                                                                           ""),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 8,
-                                                            ),
-                                                            Row(children:  [
-                                                             const Icon(
-                                                                MdiIcons
-                                                                    .mapMarkerOutline,
-                                                                color: Colors
-                                                                    .yellow,
-                                                              ),
-                                                             const SizedBox(
-                                                                width: 4,
-                                                              ),
-                                                              Text(
-                                                                  distance.toInt().toString() +
-                                                                      convertDistance(distance, " метр",
-                                                                          " метра", " метров"),
-                                                                style: const TextStyle(
-                                                                    fontFamily:
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                                Row(children: [
+                                                                  const Icon(
+                                                                    MdiIcons
+                                                                        .mapMarkerOutline,
+                                                                    color: Colors
+                                                                        .yellow,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    distance
+                                                                        .toInt()
+                                                                        .toString() +
+                                                                        convertDistance(
+                                                                            distance,
+                                                                            " метр",
+                                                                            " метра",
+                                                                            " метров"),
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
                                                                         ""),
-                                                              )
-                                                            ]),
-                                                            const SizedBox(
-                                                              height: 8,
-                                                            ),
-                                                            Row(children: [
-                                                              const Icon(
-                                                                MdiIcons
-                                                                    .currencyRub,
-                                                                color: Colors
-                                                                    .yellow,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 4,
-                                                              ),
-                                                              Text(
-                                                                selectTransport
+                                                                  )
+                                                                ]),
+                                                                const SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                                Row(children: [
+                                                                  const Icon(
+                                                                    MdiIcons
+                                                                        .currencyRub,
+                                                                    color: Colors
+                                                                        .yellow,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    selectTransport
                                                                         .price
                                                                         .toString() +
-                                                                    "р  в минуту",
-                                                                style: const TextStyle(
-                                                                    fontFamily:
+                                                                        "р  в минуту",
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
                                                                         ""),
-                                                              )
-                                                            ]),
-                                                            const SizedBox(
-                                                              height: 8,
-                                                            ),
-                                                            Row(children: [
-                                                              const SizedBox(
-                                                                width: 4,
-                                                              ),
-                                                              Icon(
-                                                                getBatteryLevelIcon(
+                                                                  )
+                                                                ]),
+                                                                const SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                                Row(children: [
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Icon(
+                                                                    getBatteryLevelIcon(
+                                                                        selectTransport
+                                                                            .batteryLevel),
+                                                                    color: Colors
+                                                                        .yellow,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Text(
                                                                     selectTransport
-                                                                        .batteryLevel),
-                                                                color: Colors
-                                                                    .yellow,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 4,
-                                                              ),
-                                                              Text(
-                                                                selectTransport
                                                                         .batteryLevel
                                                                         .toString() +
-                                                                    " %",
-                                                                style: const TextStyle(
-                                                                    fontFamily:
+                                                                        " %",
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
                                                                         ""),
-                                                              )
-                                                            ]),
-                                                          ]),
-                                                    ),
-                                                  ),
-                                                  const Spacer(),
-                                                  Column(
-                                                    children: [
-                                                      SizedBox(
-                                                          width: 192,
-                                                          height: 202,
-                                                          child: Image.asset(
-                                                              'assets/images/electric scooter profile view 2.png')),
-                                                      const SizedBox(
-                                                        height: 22,
+                                                                  )
+                                                                ]),
+                                                              ]),
+                                                        ),
                                                       ),
-                                                      ElevatedButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(context);
+                                                      const Spacer(),
+                                                      Column(
+                                                        children: [
+                                                          SizedBox(
+                                                              width: 192,
+                                                              height: 202,
+                                                              child: Image
+                                                                  .asset(
+                                                                  'assets/images/electric scooter profile view 2.png')),
+                                                          const SizedBox(
+                                                            height: 22,
+                                                          ),
+                                                          ElevatedButton(
+                                                              onPressed: () async {
+                                                                List<BankCard>
+                                                                bankCards =
+                                                                await InternetEngine()
+                                                                    .getBankCards();
+                                                                UserToRegister?
+                                                                user =
+                                                                await InternetEngine()
+                                                                    .getUser();
+                                                                if (bankCards
+                                                                    .isEmpty) {
+                                                                  showDialog(
+                                                                      context:
+                                                                      context,
+                                                                      builder:
+                                                                          (
+                                                                          context) {
+                                                                        return AlertDialog(
+                                                                          backgroundColor:
+                                                                          Colors
+                                                                              .black,
 
-                                                          },
-                                                          child: const Text(
-                                                            'Начать поездку',
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 42,
-                                                      ),
+                                                                          // shape: RoundedRectangleBorder(
+                                                                          //   borderRadius: BorderRadius.circular(6),
+                                                                          //   side: const BorderSide(color: Colors.yellow),
+                                                                          // ),
+                                                                          title:
+                                                                          const Text(
+                                                                            "Ошибка",
+                                                                            style:
+                                                                            TextStyle(
+                                                                              color:
+                                                                              Colors
+                                                                                  .white,
+                                                                            ),
+                                                                          ),
+                                                                          content:
+                                                                          const Text(
+                                                                            "У вас нет существующих банковских карт, хотите добавить новую?",
+                                                                          ),
+                                                                          actions: [
+                                                                            Container(
+                                                                              padding: const EdgeInsets
+                                                                                  .only(
+                                                                                  left: 16,
+                                                                                  right: 16,
+                                                                                  bottom: 16),
+                                                                              child:
+                                                                              Row(
+                                                                                mainAxisAlignment:
+                                                                                MainAxisAlignment
+                                                                                    .center,
+                                                                                children: [
+                                                                                  SizedBox(
+                                                                                    width: 130,
+                                                                                    child: ElevatedButton(
+                                                                                        onPressed: () {
+                                                                                          BankCard bankCard = BankCard(
+                                                                                              numberBankCard: "",
+                                                                                              cardDate: DateTime
+                                                                                                  .now(),
+                                                                                              cardCvc: 0,
+                                                                                              userId: 0);
+                                                                                          Navigator
+                                                                                              .pop(
+                                                                                              context);
+                                                                                          BankCardModalBottomSheet(
+                                                                                              context,
+                                                                                              bankCard,
+                                                                                              user!,
+                                                                                              true)
+                                                                                              .show();
+                                                                                          return;
+                                                                                        },
+                                                                                        child: const Text(
+                                                                                            "Да")),
+                                                                                  ),
+                                                                                  const Spacer(),
+                                                                                  SizedBox(
+                                                                                    width: 130,
+                                                                                    child: ElevatedButton(
+                                                                                        style: ElevatedButton
+                                                                                            .styleFrom(
+                                                                                            primary: Colors
+                                                                                                .black,
+                                                                                            onPrimary: Colors
+                                                                                                .yellow,
+                                                                                            side: const BorderSide(
+                                                                                                width: 2.0,
+                                                                                                color: Colors
+                                                                                                    .yellow)),
+                                                                                        onPressed: () {
+                                                                                          Navigator
+                                                                                              .pop(
+                                                                                              context);
+                                                                                          return;
+                                                                                        },
+                                                                                        child: const Text(
+                                                                                            'Нет')),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      });
+                                                                }
+                                                                else {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  showModalBottomSheet(
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius
+                                                                            .circular(
+                                                                            20.0),
+                                                                      ),
+                                                                      isScrollControlled: true,
+                                                                      backgroundColor: Colors
+                                                                          .black,
+                                                                      context: context,
+                                                                      builder: (
+                                                                          context) {
+                                                                        return StatefulBuilder(
+                                                                            builder: (
+                                                                                context,
+                                                                                setModalState) {
+                                                                              return Container(
+                                                                                  padding: const EdgeInsets
+                                                                                      .only(
+                                                                                      left: 16,
+                                                                                      right: 16),
+                                                                                  child: Column(
+                                                                                      mainAxisSize: MainAxisSize
+                                                                                          .min,
+                                                                                      children: [
+                                                                                        const SizedBox(
+                                                                                          height: 16,
+                                                                                        ),
+                                                                                        Center(
+                                                                                          child: Container(
+                                                                                            decoration:
+                                                                                            const BoxDecoration(
+                                                                                              borderRadius:
+                                                                                              BorderRadius
+                                                                                                  .all(
+                                                                                                  Radius
+                                                                                                      .circular(
+                                                                                                      20)),
+                                                                                              color: Colors
+                                                                                                  .white,
+                                                                                            ),
+                                                                                            height: 3,
+                                                                                            width: 60,
+                                                                                          ),
+                                                                                        ),
+                                                                                        const SizedBox(
+                                                                                          height: 16,
+                                                                                        ),
+                                                                                        Row(
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                height:
+                                                                                                MediaQuery
+                                                                                                    .of(
+                                                                                                    context)
+                                                                                                    .size
+                                                                                                    .height /
+                                                                                                    3,
+                                                                                                padding:
+                                                                                                const EdgeInsets
+                                                                                                    .only(
+                                                                                                    left: 16,
+                                                                                                    right: 16),
+                                                                                                child: Align(
+                                                                                                  alignment:
+                                                                                                  Alignment
+                                                                                                      .centerLeft,
+                                                                                                  child: Column(
+                                                                                                      crossAxisAlignment:
+                                                                                                      CrossAxisAlignment
+                                                                                                          .start,
+                                                                                                      mainAxisAlignment:
+                                                                                                      MainAxisAlignment
+                                                                                                          .start,
+                                                                                                      children: [
+                                                                                                         Text(
+                                                                                                          "Поездка начата",
+                                                                                                          style: Theme
+                                                                                                              .of(
+                                                                                                              context)
+                                                                                                              .textTheme
+                                                                                                              .subtitle1,
+                                                                                                        ),
+                                                                                                        Text(
+                                                                                                          selectTransport
+                                                                                                              .manufacturer,
+                                                                                                          textAlign:
+                                                                                                          TextAlign
+                                                                                                              .left,
+                                                                                                        ),
+                                                                                                        const SizedBox(
+                                                                                                          height: 5,
+                                                                                                        ),
+                                                                                                        Text(
+                                                                                                          selectTransport
+                                                                                                              .name,
+                                                                                                        ),
+                                                                                                        const SizedBox(
+                                                                                                          height: 8,
+                                                                                                        ),
+                                                                                                        Row(
+                                                                                                          children: const [
+                                                                                                            Icon(
+                                                                                                              MdiIcons
+                                                                                                                  .clockTimeThreeOutline,
+                                                                                                              color: Colors
+                                                                                                                  .yellow,
+                                                                                                            ),
+                                                                                                            SizedBox(
+                                                                                                              width: 4,
+                                                                                                            ),
+                                                                                                            Text(
+                                                                                                              "1:00",
+                                                                                                              style: TextStyle(
+                                                                                                                  fontFamily:
+                                                                                                                  ""),
+                                                                                                            )
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                        const SizedBox(
+                                                                                                          height: 8,
+                                                                                                        ),
+                                                                                                        Row(children: [
+                                                                                                          const Icon(
+                                                                                                            MdiIcons
+                                                                                                                .mapMarkerOutline,
+                                                                                                            color: Colors
+                                                                                                                .yellow,
+                                                                                                          ),
+                                                                                                          const SizedBox(
+                                                                                                            width: 4,
+                                                                                                          ),
+                                                                                                          Text(
+                                                                                                            "~"+
+                                                                                                            distance
+                                                                                                                .toInt()
+                                                                                                                .toString() +
+                                                                                                                convertDistance(
+                                                                                                                    distance,
+                                                                                                                    " метр",
+                                                                                                                    " метра",
+                                                                                                                    " метров"),
+                                                                                                            style: const TextStyle(
+                                                                                                                fontFamily:
+                                                                                                                ""),
+                                                                                                          )
+                                                                                                        ]),
+                                                                                                        const SizedBox(
+                                                                                                          height: 8,
+                                                                                                        ),
+                                                                                                        Row(children: [
+                                                                                                          const Icon(
+                                                                                                            MdiIcons
+                                                                                                                .currencyRub,
+                                                                                                            color: Colors
+                                                                                                                .yellow,
+                                                                                                          ),
+                                                                                                          const SizedBox(
+                                                                                                            width: 4,
+                                                                                                          ),
+                                                                                                          Text(
+                                                                                                            selectTransport
+                                                                                                                .price
+                                                                                                                .toString() +
+                                                                                                                "р  в минуту",
+                                                                                                            style: const TextStyle(
+                                                                                                                fontFamily:
+                                                                                                                ""),
+                                                                                                          )
+                                                                                                        ]),
+                                                                                                        const SizedBox(
+                                                                                                          height: 8,
+                                                                                                        ),
+                                                                                                        Row(children: [
+                                                                                                          const SizedBox(
+                                                                                                            width: 4,
+                                                                                                          ),
+                                                                                                          Icon(
+                                                                                                            getBatteryLevelIcon(
+                                                                                                                selectTransport
+                                                                                                                    .batteryLevel),
+                                                                                                            color: Colors
+                                                                                                                .yellow,
+                                                                                                          ),
+                                                                                                          const SizedBox(
+                                                                                                            width: 4,
+                                                                                                          ),
+                                                                                                          Text(
+                                                                                                            selectTransport
+                                                                                                                .batteryLevel
+                                                                                                                .toString() +
+                                                                                                                " %",
+                                                                                                            style: const TextStyle(
+                                                                                                                fontFamily:
+                                                                                                                ""),
+                                                                                                          )
+                                                                                                        ]),
+                                                                                                      ]),
+                                                                                                ),
+                                                                                              ),
+                                                                                              const Spacer(),
+                                                                                              Column(
+                                                                                                  children: [
+                                                                                                    SizedBox(
+                                                                                                        width: 192,
+                                                                                                        height: 202,
+                                                                                                        child: Image
+                                                                                                            .asset(
+                                                                                                            'assets/images/electric scooter profile view 2.png')),
+                                                                                                    const SizedBox(
+                                                                                                      height: 22,
+                                                                                                    ),
+                                                                                                    ElevatedButton(
+                                                                                                        style: ElevatedButton
+                                                                                                            .styleFrom(
+                                                                                                            primary: Colors
+                                                                                                                .black,
+                                                                                                            onPrimary: Colors
+                                                                                                                .yellow,
+                                                                                                            side: const BorderSide(
+                                                                                                                width: 2.0,
+                                                                                                                color: Colors
+                                                                                                                    .yellow)),
+                                                                                                        onPressed: () {
+                                                                                                          Navigator
+                                                                                                              .pop(
+                                                                                                              context);
+                                                                                                          return;
+                                                                                                        },
+                                                                                                        child: const Text(
+                                                                                                            'Закончить ')),
+                                                                                                  ]),
+                                                                                            ])
+                                                                                      ]
+                                                                                  ));
+                                                                            });
+                                                                      });
+                                                                }
+                                                              },
+                                                              child: const Text(
+                                                                'Начать поездку',
+                                                              )),
+                                                          const SizedBox(
+                                                            height: 42,
+                                                          ),
+                                                        ],
+                                                      )
                                                     ],
-                                                  )
-                                                ],
-                                              ),
-                                            ]));
-                                  });
+                                                  ),
+                                                ]));
+                                      });
                                 });
                           }
                         },

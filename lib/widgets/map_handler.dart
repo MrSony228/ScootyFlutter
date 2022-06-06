@@ -122,7 +122,7 @@ class MapHandler extends StatelessWidget {
         controller: mapController,
         trackMyPosition: true,
         showZoomController: true,
-        androidHotReloadSupport: true,
+       // androidHotReloadSupport: true,
         initZoom: 18,
         onMapIsReady: (result) async {
           await setTransport(500, 30);
@@ -307,22 +307,22 @@ class MapHandler extends StatelessWidget {
                 });
               });
         },
-        userLocationMarker: UserLocationMaker(
-          personMarker: const MarkerIcon(
-            icon: Icon(
-              MdiIcons.circleSmall,
-              color: Colors.transparent,
-              size: 0,
-            ),
-          ),
-          directionArrowMarker: const MarkerIcon(
-            icon: Icon(
-              Icons.double_arrow,
-              color: Color(0xff0014c4),
-              size: 170,
-            ),
-          ),
-        ),
+        // userLocationMarker: UserLocationMaker(
+        //   personMarker: const MarkerIcon(
+        //     icon: Icon(
+        //       MdiIcons.circleSmall,
+        //       color: Colors.transparent,
+        //       size: 0,
+        //     ),
+        //   ),
+        //   directionArrowMarker: const MarkerIcon(
+        //     icon: Icon(
+        //       Icons.double_arrow,
+        //       color: Color(0xff0014c4),
+        //       size: 170,
+        //     ),
+        //   ),
+        // ),
         // roadConfiguration: RoadConfiguration(
         //   startIcon: const MarkerIcon(
         //     icon: Icon(
