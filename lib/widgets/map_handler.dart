@@ -32,6 +32,12 @@ class MapHandler extends StatelessWidget {
 
   Future<List<ParkingPlaces>?> setTransport(
       double _maxDist, double _batteryLevel) async {
+    List<GeoPoint> geoPoints = await mapController.geopoints;
+    if(geoPoints.isNotEmpty){
+      for(int i = 0; i<geoPoints.length; i++){
+        await mapController.removeMarker(geoPoints[i]);
+      }
+    }
     var position = await _determinePosition();
     try {
       parking = (await InternetEngine().getTransport(
@@ -77,9 +83,9 @@ class MapHandler extends StatelessWidget {
     return updatedDt.toString();
   }
 
-  IconData getBatteryLevelIcon(int batteryLevel){
-    double n = batteryLevel/10;
-    switch(n.toInt()) {
+  IconData getBatteryLevelIcon(int batteryLevel) {
+    double n = batteryLevel / 10;
+    switch (n.toInt()) {
       case 1:
         return MdiIcons.batteryCharging10;
       case 2:
@@ -122,22 +128,20 @@ class MapHandler extends StatelessWidget {
         controller: mapController,
         trackMyPosition: true,
         showZoomController: true,
-       // androidHotReloadSupport: true,
+        // androidHotReloadSupport: true,
         initZoom: 18,
         onMapIsReady: (result) async {
           await setTransport(500, 30);
           position = await _determinePosition();
+          await mapController.currentLocation();
+          await mapController.setZoom(stepZoom: 14);
         },
         onLocationChanged: (GeoPoint geoPoint) async {
-        //  await mapController.currentLocation();
+            await mapController.currentLocation();
         },
         onGeoPointClicked: (GeoPoint geoPoint) async {
           double distance = 0;
-          // parking = await InternetEngine().getTransport(
-          //     position.latitude.toString(),
-          //     position.longitude.toString(),
-          //     10000.toString(),
-          //     0.toString());
+            position = await _determinePosition();
           for (var parkingPlace in parking) {
             if (parkingPlace.longitude == geoPoint.longitude &&
                 parkingPlace.latitude == geoPoint.latitude) {
@@ -201,14 +205,18 @@ class MapHandler extends StatelessWidget {
                                             .textTheme
                                             .subtitle1,
                                       ),
-                                      const SizedBox(height: 5,),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
                                       Text(
                                         transport[0].name,
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle1,
                                       ),
-                                      const SizedBox(height: 8,),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       Row(
                                         children: [
                                           const Icon(
@@ -225,7 +233,9 @@ class MapHandler extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                      const SizedBox(height: 8,),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       Row(children: [
                                         const Icon(
                                           MdiIcons.mapMarkerOutline,
@@ -242,7 +252,9 @@ class MapHandler extends StatelessWidget {
                                               const TextStyle(fontFamily: ""),
                                         )
                                       ]),
-                                      const SizedBox(height: 8,),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       Row(children: [
                                         const Icon(
                                           MdiIcons.currencyRub,
@@ -258,11 +270,16 @@ class MapHandler extends StatelessWidget {
                                               const TextStyle(fontFamily: ""),
                                         )
                                       ]),
-                                      const SizedBox(height: 8,),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
                                       Row(children: [
-                                        const SizedBox(width: 4,),
-                                         Icon(
-                                          getBatteryLevelIcon(transport[0].batteryLevel),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        Icon(
+                                          getBatteryLevelIcon(
+                                              transport[0].batteryLevel),
                                           color: Colors.yellow,
                                         ),
                                         const SizedBox(
@@ -272,13 +289,13 @@ class MapHandler extends StatelessWidget {
                                           transport[0].batteryLevel.toString() +
                                               " %",
                                           style:
-                                          const TextStyle(fontFamily: ""),
+                                              const TextStyle(fontFamily: ""),
                                         )
                                       ]),
                                     ]),
                               ),
                             ),
-                             const Spacer(),
+                            const Spacer(),
                             Column(
                               children: [
                                 SizedBox(
@@ -290,9 +307,7 @@ class MapHandler extends StatelessWidget {
                                   height: 22,
                                 ),
                                 ElevatedButton(
-                                    onPressed: () {
-
-                                    },
+                                    onPressed: () {},
                                     child: const Text(
                                       'Забронировать',
                                     )),

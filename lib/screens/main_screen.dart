@@ -15,6 +15,7 @@ import 'package:scooty/widgets/map_handler.dart';
 import 'package:scooty/widgets/menu_modal_bottom_sheet.dart';
 import '../model/bank_card.dart';
 import '../model/parking_places.dart';
+import '../model/return_menu.dart';
 import '../widgets/bank_card_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -141,17 +142,21 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 leading: IconButton(
                   icon: const Icon(CustomIcons.menu),
-                  onPressed: () async {
-                    await MenuModalBottomSheet(context).show();
+                  onPressed: ()  {
+                 MenuModalBottomSheet(context).show();
                   },
                 ),
                 actions: [
                   IconButton(
                     icon: const Icon(CustomIcons.filter),
-                    onPressed: () {
-                      FilterModalBottomSheet(context, _batteryLevel, _maxDist,
+                    onPressed: () async {
+                       ReturnMenu result = await FilterModalBottomSheet(context, _batteryLevel, _maxDist,
                           parking, mapController)
                           .show();
+                      parking = result.parking;
+                      _batteryLevel = result.batteryLevel;
+                      _maxDist = result.maxDist;
+
                     },
                   )
                 ],
@@ -777,10 +782,11 @@ class _MainScreenState extends State<MainScreen> {
                                                                                                                 width: 2.0,
                                                                                                                 color: Colors
                                                                                                                     .yellow)),
-                                                                                                        onPressed: () {
+                                                                                                        onPressed: () async {
                                                                                                           Navigator
                                                                                                               .pop(
                                                                                                               context);
+                                                                                                         parking = (await MapHandler(mapController, parking).setTransport(_maxDist, _batteryLevel))!;
                                                                                                           return;
                                                                                                         },
                                                                                                         child: const Text(

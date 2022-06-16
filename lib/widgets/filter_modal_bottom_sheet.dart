@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:scooty/model/parking_places.dart';
+import 'package:scooty/model/return_menu.dart';
 import 'package:scooty/screens/main_screen.dart';
 
 import 'map_handler.dart';
@@ -11,13 +12,14 @@ class FilterModalBottomSheet {
   double _batteryLevel;
   double _maxDist;
   MapController mapController;
-  final List<ParkingPlaces> parking;
+   List<ParkingPlaces> parking;
 
   FilterModalBottomSheet(this.context, this._batteryLevel, this._maxDist,
       this.parking, this.mapController);
 
-  void show() {
-    showModalBottomSheet(
+  Future<ReturnMenu> show() async{
+    ReturnMenu result = ReturnMenu(parking: parking, batteryLevel: _batteryLevel, maxDist: _maxDist);
+   await showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
@@ -109,9 +111,10 @@ class FilterModalBottomSheet {
                                       latitude: parkingPlace.latitude,
                                       longitude: parkingPlace.longitude));
                                 }
-                                MapHandler(mapController, parking).setTransport(_maxDist, _batteryLevel);
+                                parking = (await MapHandler(mapController, parking).setTransport(_maxDist, _batteryLevel))!;
+                                result = ReturnMenu(parking: parking, batteryLevel: _batteryLevel, maxDist: _maxDist);
                                 Navigator.pop(
-                                    context, [_maxDist, _batteryLevel]);
+                                    context, result);
                               },
                               child: const Text("Показать")),
                         ),
@@ -126,5 +129,6 @@ class FilterModalBottomSheet {
             );
           });
         });
+    return result;
   }
 }

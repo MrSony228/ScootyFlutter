@@ -195,94 +195,6 @@ class _PassportRegistrationScreenState
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      "Нажимая кнопку продолжить, вы принимаете действительное ",
-                      textAlign: TextAlign.center,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText1,
-                    ),
-                  ),
-                ],
-              ),
-              InkWell(
-                onTap: () async {
-                  String license = await rootBundle.loadString(
-                      'assets/text/license.txt');
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        side: const BorderSide(
-                          width: 1,
-                          color: Colors.yellow
-                        )
-                      ),
-                      isScrollControlled: true,
-                      backgroundColor: Colors.black,
-                      context: context,
-                      builder: (context) {
-                        return StatefulBuilder(
-                            builder: (context, setModalState) {
-                              return Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 16, right: 16),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                  const SizedBox(
-                                  height: 16,
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        color: Colors.white,
-                                      ),
-                                      height: 3,
-                                      width: 60,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Container(
-                                    height: MediaQuery.of(context).size.height/1.1,
-                                      padding: const EdgeInsets.only(
-                                          left: 16, right: 16),
-                                      child: ListView(children: [ const Text(
-                                        "Лицензионное соглашение",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 24),),
-                                        const SizedBox(height: 16,),
-                                        Text(license, ),
-                                      ]
-                                  )
-                              ),])
-                              ,
-                              );
-                            });
-                      });
-                },
-                child: const Text("Лицензионное соглашение",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow,
-
-                    )),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               SizedBox(
                 width: double.infinity,
                 height: 45,
@@ -342,12 +254,12 @@ class _PassportRegistrationScreenState
                             });
                         return;
                       }
-
+                      await InternetEngine().login(widget.user.email, widget.user.password!);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                               MainScreen()),
+                               const MainScreen()),
                       );
                     },
                     child: const Text(

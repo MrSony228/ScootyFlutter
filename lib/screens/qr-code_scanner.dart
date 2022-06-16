@@ -4,7 +4,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:scooty/internet_engine.dart';
 
 import '../model/transport.dart';
-import '../presentation/custom_icons_icons.dart';
 
 class QrCodeScannerScreen extends StatefulWidget {
   const QrCodeScannerScreen({Key? key}) : super(key: key);
