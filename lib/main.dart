@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('ru', ''),
+       // Locale('en', '')
       ],
       theme: ThemeData(
         fontFamily: 'CeraPro',

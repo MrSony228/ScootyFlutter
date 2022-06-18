@@ -129,6 +129,8 @@ class BankCardModalBottomSheet {
                                         ),
                                         child: child!,
                                       ),
+                                      initialDatePickerMode: DatePickerMode.year,
+                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
                                       initialDate: selectDate,
                                       firstDate: DateTime(1940, 8),
                                       lastDate: DateTime(2110),

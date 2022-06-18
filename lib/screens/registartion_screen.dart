@@ -260,75 +260,79 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ],
               ),
-              InkWell(
-                onTap: () async {
-                  String license = await rootBundle.loadString(
-                      'assets/text/license.txt');
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: const BorderSide(
-                              width: 1,
-                              color: Colors.yellow
-                          )
-                      ),
-                      isScrollControlled: true,
-                      backgroundColor: Colors.black,
-                      context: context,
-                      builder: (context) {
-                        return StatefulBuilder(
-                            builder: (context, setModalState) {
-                              return Container(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 16),
-                                child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)),
-                                            color: Colors.white,
+              const SizedBox(height: 4,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      String license = await rootBundle.loadString(
+                          'assets/text/license.txt');
+                      showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              side: const BorderSide(
+                                  width: 1,
+                                  color: Colors.yellow
+                              )
+                          ),
+                          isScrollControlled: true,
+                          backgroundColor: Colors.black,
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                                builder: (context, setModalState) {
+                                  return Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 16, right: 16),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          const SizedBox(
+                                            height: 16,
                                           ),
-                                          height: 3,
-                                          width: 60,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 16,
-                                      ),
-                                      Container(
-                                          height: MediaQuery.of(context).size.height/1.1,
-                                          padding: const EdgeInsets.only(
-                                              left: 16, right: 16),
-                                          child: ListView(children: [ const Text(
-                                            "Лицензионное соглашение",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 24),),
-                                            const SizedBox(height: 16,),
-                                            Text(license, ),
-                                          ]
-                                          )
-                                      ),])
-                                ,
-                              );
-                            });
-                      });
-                },
-                child: const Text("Лицензионное соглашение",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.yellow,
+                                          Center(
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                                color: Colors.white,
+                                              ),
+                                              height: 3,
+                                              width: 60,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          Container(
+                                              height: MediaQuery.of(context).size.height/1.1,
+                                              padding: const EdgeInsets.only(
+                                                  left: 16, right: 16),
+                                              child: ListView(children: [ const Text(
+                                                "Лицензионное соглашение",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 24),),
+                                                const SizedBox(height: 16,),
+                                                Text(license, ),
+                                              ]
+                                              )
+                                          ),])
+                                    ,
+                                  );
+                                });
+                          });
+                    },
+                    child: const Text("Лицензионное соглашение",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.yellow,
 
-                    )),
-              ),
+                        )),
+                  ),
               Text(
                 " и ",
                 textAlign: TextAlign.center,
@@ -337,6 +341,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     .textTheme
                     .bodyText1,
               ),
+                ],
+              ),
+              const SizedBox(height: 4,),
               InkWell(
                 onTap: () async {
                   String license = await rootBundle.loadString(
@@ -531,12 +538,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("Ошибка"),
+                                  backgroundColor: Colors.black,
+                                  title: const Text("Ошибка", style: TextStyle(
+                                       color: Colors.white,
+                                     ),),
                                   content: const Text(
                                     "Этот e-mail уже используеться, укажите другой e-mail",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
                                   ),
                                   actions: [
                                     ElevatedButton(

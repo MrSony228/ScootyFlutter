@@ -199,8 +199,7 @@ class _DriverLicenseRegistrationScreenState
                     onPressed: () {
                       if (seriesUdostController.text.isEmpty ||
                           numberUdostController.text.isEmpty ||
-                          issuedByUdostController.text.isEmpty ||
-                          selectDate.isAfter(DateTime.now())) {
+                          issuedByUdostController.text.isEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -214,6 +213,32 @@ class _DriverLicenseRegistrationScreenState
                                 ),
                                 content: const Text(
                                   "Заполните все поля",
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Закрыть"))
+                                ],
+                              );
+                            });
+                        return;
+                      }
+                      if(selectDate.isAfter(DateTime.now())){
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  "Ошибка",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: const Text(
+                                  "Дата выдачи выбранна неверно",
                                 ),
                                 actions: [
                                   ElevatedButton(

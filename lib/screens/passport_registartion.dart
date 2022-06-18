@@ -146,15 +146,28 @@ class _PassportRegistrationScreenState
                                 Future<void> _selectDate(
                                     BuildContext context) async {
                                   final DateTime? picked = await showDatePicker(
-                                      context: context,
-                                      initialDate: selectDate,
-                                      firstDate: DateTime(1940, 8),
-                                      lastDate: DateTime(2101));
+                                    context: context,
+                                    builder: (context, child) => Theme(
+                                      data: ThemeData().copyWith(
+                                        colorScheme: const ColorScheme.dark(
+                                          primary: Colors.yellow,
+                                          onPrimary: Colors.black,
+                                          surface: Colors.black,
+                                          onSurface: Colors.white,
+                                        ),
+                                        dialogBackgroundColor: Colors.black,
+                                      ),
+                                      child: child!,
+                                    ),
+
+
+                                    initialDate: selectDate,
+                                    firstDate: DateTime(1940, 8),
+                                    lastDate: DateTime(2110),
+                                  );
                                   if (picked != null && picked != selectDate) {
                                     setState(() {
                                       selectDate = picked;
-                                      widget.user.dateOfIssuePassport =
-                                          selectDate;
                                     });
                                   }
                                 }
@@ -202,8 +215,7 @@ class _PassportRegistrationScreenState
                     onPressed: () async {
                       if (seriesUdostController.text.isEmpty ||
                           numberUdostController.text.isEmpty ||
-                          issuedByUdostController.text.isEmpty ||
-                          selectDate.isAfter(DateTime.now())) {
+                          issuedByUdostController.text.isEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -214,6 +226,32 @@ class _PassportRegistrationScreenState
                                 ),),
                                 content: const Text(
                                   "Заполните все поля",
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Закрыть"))
+                                ],
+                              );
+                            });
+                        return;
+                      }
+                      if(selectDate.isAfter(DateTime.now())){
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  "Ошибка",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                content: const Text(
+                                  "Дата выдачи выбранна неверно",
                                 ),
                                 actions: [
                                   ElevatedButton(
