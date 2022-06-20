@@ -26,8 +26,35 @@ class _QrCodeScannerScreen extends State<QrCodeScannerScreen> {
           controller: cameraController,
           onDetect: (barcode, args) async {
             final String? code = barcode.rawValue;
-            Transport result =
+            Transport? result =
                 await InternetEngine().getTransportByQrCode(code!);
+            if (result == null) {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.black,
+                      title: const Text(
+                        "Ошибка",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      content: const Text(
+                        "Неверный Qr-Code, попробуйте отсканировать заново",
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Закрыть"))
+                      ],
+                    );
+                  });
+              cameraController = MobileScannerController();
+              return;
+            }
             Navigator.pop(context, result);
             // showDialog(
             //     context: context,
@@ -45,24 +72,35 @@ class _QrCodeScannerScreen extends State<QrCodeScannerScreen> {
             //               },
             //               child: const Text("Закрыть"))
             //         ],
-             //     );
-               // });
+            //     );
+            // });
           }),
-
       Container(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             children: const [
-             SizedBox(height: 100,),
-              Text("Поиск самоката", style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal, fontFamily: 'CeraPro'),  ),
-              SizedBox(height: 10,),
-              Text("Отсканируйте Qr-код на руле самоката", style: TextStyle(fontSize: 15, fontFamily: ""),),
+              SizedBox(
+                height: 100,
+              ),
+              Text(
+                "Поиск самоката",
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'CeraPro'),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Отсканируйте Qr-код на руле самоката",
+                style: TextStyle(fontSize: 15, fontFamily: ""),
+              ),
             ],
           ),
         ),
       ),
-
       Center(
           child: SizedBox(
         width: 220,
@@ -79,12 +117,18 @@ class _QrCodeScannerScreen extends State<QrCodeScannerScreen> {
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(MdiIcons.windowClose, color: Colors.white,), iconSize: 36,
+                icon: const Icon(
+                  MdiIcons.windowClose,
+                  color: Colors.white,
+                ),
+                iconSize: 36,
               ),
             ],
           ),

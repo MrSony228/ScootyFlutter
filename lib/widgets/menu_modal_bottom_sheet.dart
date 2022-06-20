@@ -80,15 +80,15 @@ class MenuModalBottomSheet {
                   const SizedBox(
                     height: 16,
                   ),
-                  DialogLine('Уведомления', MdiIcons.bellOutline, () {
-                    Navigator.pop(context);
-                  }),
-                  DialogLine('Профиль', MdiIcons.accountOutline, () {
-                    Navigator.pop(context);
-                  }),
-                  DialogLine('История поездок', MdiIcons.history, () {
-                    Navigator.pop(context);
-                  }),
+                  // DialogLine('Уведомления', MdiIcons.bellOutline, () {
+                  //   Navigator.pop(context);
+                  // }),
+                  // DialogLine('Профиль', MdiIcons.accountOutline, () {
+                  //   Navigator.pop(context);
+                  // }),
+                  // DialogLine('История поездок', MdiIcons.history, () {
+                  //   Navigator.pop(context);
+                  // }),
                   DialogLine('Банковские карты', MdiIcons.creditCardOutline,
                       () async {
                     List<BankCard> result =
@@ -126,7 +126,7 @@ class MenuModalBottomSheet {
                                             onPressed: () {
                                               BankCard bankCard = BankCard(
                                                   numberBankCard: "",
-                                                  cardDate: DateTime.now(),
+                                                  cardDate: "",
                                                   cardCvc: 0,
                                                   userId: 0);
                                               Navigator.pop(context);

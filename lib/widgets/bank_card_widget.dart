@@ -18,9 +18,14 @@ class BankCardModalBottomSheet {
 
   TextEditingController bankCardNumberController = TextEditingController();
   TextEditingController bankCardCVCController = TextEditingController();
-  DateTime selectDate = DateTime.now();
+  TextEditingController bankCardDateController = TextEditingController();
+  String selectDate = "";
+  bool deleteVisibility = true;
 
   void show() async {
+    if(isEmpty == true){
+      deleteVisibility =false;
+    }
     if (isEmpty == false) {
       fillBankCard(bankCard);
     }
@@ -97,61 +102,19 @@ class BankCardModalBottomSheet {
                                 MaskTextInputFormatter(
                                     mask: '#### #### #### ####',
                                     filter: {"#": RegExp(r'[0-9]')},
-                                    type: MaskAutoCompletionType.lazy)),
+                                    type: MaskAutoCompletionType.lazy), TextInputType.number),
                           ),
                           const Spacer(),
                           SizedBox(
                             height: 48,
                             width: 115,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shadowColor: Colors.transparent,
-                                    primary: Colors.white,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(7.0),
-                                    )),
-                                onPressed: () {
-                                  Future<void> _selectDate(
-                                      BuildContext context) async {
-                                    final DateTime? picked =
-                                        await showDatePicker(
-                                      context: context,
-                                      builder: (context, child) => Theme(
-                                        data: ThemeData().copyWith(
-                                          colorScheme: const ColorScheme.dark(
-                                            primary: Colors.yellow,
-                                            onPrimary: Colors.black,
-                                            surface: Colors.black,
-                                            onSurface: Colors.white,
-                                          ),
-                                          dialogBackgroundColor: Colors.black,
-                                        ),
-                                        child: child!,
-                                      ),
-                                      initialDatePickerMode: DatePickerMode.year,
-                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
-                                      initialDate: selectDate,
-                                      firstDate: DateTime(1940, 8),
-                                      lastDate: DateTime(2110),
-                                    );
-                                    if (picked != null &&
-                                        picked != selectDate) {
-                                      setModalState(() {
-                                        selectDate = picked;
-                                      });
-                                    }
-                                  }
-
-                                  _selectDate(context);
-                                },
-                                child: Text(
-                                  "${selectDate.toLocal()}".split(' ')[0],
-                                  style: const TextStyle(
-                                      color: Color.fromRGBO(101, 101, 101, 1),
-                                      fontSize: 17),
-                                  textAlign: TextAlign.left,
-                                )),
+                            child: ScootyTextField(
+                                "06/26",
+                                bankCardDateController,
+                                MaskTextInputFormatter(
+                                    mask: '*#/##',
+                                    filter: {"#": RegExp(r'[0-9]'), "*": RegExp(r'[0-1]')},
+                                    type: MaskAutoCompletionType.lazy), TextInputType.number),
                           ),
                         ]),
                         const SizedBox(
@@ -171,13 +134,41 @@ class BankCardModalBottomSheet {
                             const Spacer(),
                             SizedBox(
                               width: 45,
-                              child: ScootyTextField(
-                                  "123",
-                                  bankCardCVCController,
-                                  MaskTextInputFormatter(
-                                      mask: '###',
-                                      filter: {"#": RegExp(r'[0-9]')},
-                                      type: MaskAutoCompletionType.lazy)),
+                              child:
+
+                              TextField(
+                                controller: bankCardCVCController,
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [ MaskTextInputFormatter(
+                                  mask: '###',
+                                  filter: {"#": RegExp(r'[0-9]')},
+                                  type: MaskAutoCompletionType.lazy)],
+                                style: const TextStyle(color: Colors.black, fontSize: 17),
+                                textAlignVertical: TextAlignVertical.center,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(7.0),
+                                      borderSide: const BorderSide(color: Colors.white)),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(7.0),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:const BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(7.0),
+                                  ),
+                                  hintText: '123',
+                                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
+                                  hintStyle: const TextStyle(
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              )
                             ),
                           ],
                         )
@@ -196,10 +187,144 @@ class BankCardModalBottomSheet {
                               side: const BorderSide(
                                   width: 2.0, color: Colors.yellow)),
                           onPressed: () async {
+                            if(bankCardNumberController.text.isEmpty||
+                            bankCardDateController.text.isEmpty||
+                            bankCardDateController.text.isEmpty){
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.black,
+                                      title: const Text(
+                                        "Ошибка",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                        "Заполните все поля",
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Закрыть"))
+                                      ],
+                                    );
+                                  });
+                              return;
+                            }
+                            if(bankCardNumberController.text.length < 13)
+                              {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        backgroundColor: Colors.black,
+                                        title: const Text(
+                                          "Ошибка",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          "Номер карты введен неверно",
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("Закрыть"))
+                                        ],
+                                      );
+                                    });
+                                return;
+                              }
+                            if(bankCardDateController.text.length < 5 ){
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.black,
+                                      title: const Text(
+                                        "Ошибка",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                        "Неверно введена дата",
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Закрыть"))
+                                      ],
+                                    );
+                                  });
+                              return;
+                            }
+                            var month = int.parse(bankCardDateController.text.substring(0,2));
+                            if(month > 12){
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.black,
+                                      title: const Text(
+                                        "Ошибка",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                        "В году всего 12 месяцев!",
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Закрыть"))
+                                      ],
+                                    );
+                                  });
+                              return;
+                            }
+                            if(bankCardCVCController.text.length < 3){
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.black,
+                                      title: const Text(
+                                        "Ошибка",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                        "Неверно введен CVC-код",
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Закрыть"))
+                                      ],
+                                    );
+                                  });
+                              return;
+                            }
                             if (isEmpty == false) {
                               bankCard.cardCvc =
                                   int.parse(bankCardCVCController.text);
-                              bankCard.cardDate = selectDate;
+                              bankCard.cardDate = bankCardDateController.text;
                               bankCard.numberBankCard =
                                   bankCardNumberController.text;
                               bool result =
@@ -254,7 +379,7 @@ class BankCardModalBottomSheet {
                             } else {
                               bankCard.cardCvc =
                                   int.parse(bankCardCVCController.text);
-                              bankCard.cardDate = selectDate;
+                              bankCard.cardDate = bankCardDateController.text;
                               bankCard.numberBankCard =
                                   bankCardNumberController.text;
                               bool result =
@@ -311,137 +436,139 @@ class BankCardModalBottomSheet {
                   const SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
-                            onPrimary: Colors.yellow,
-                            side: const BorderSide(
-                                width: 2.0, color: Colors.yellow)),
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.black,
+                  Visibility(
+                    child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.black,
+                              onPrimary: Colors.yellow,
+                              side: const BorderSide(
+                                  width: 2.0, color: Colors.yellow)),
+                          onPressed: () async {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.black,
 
-                                  // shape: RoundedRectangleBorder(
-                                  //   borderRadius: BorderRadius.circular(6),
-                                  //   side: const BorderSide(color: Colors.yellow),
-                                  // ),
-                                  title: const Text(
-                                    "Уведомление",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  content: const Text(
-                                    "Вы точно хотите удалить карту?",
-                                  ),
-                                  actions: [
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 16, right: 16, bottom: 16),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 130,
-                                            child: ElevatedButton(
-                                                onPressed: () async {
-                                                  var result =
-                                                      await InternetEngine()
-                                                          .deleteBankCard(
-                                                              bankCard);
-                                                  if (result == true) {
-                                                    Navigator.pop(context);
-                                                    Navigator.pop(context);
-                                                    return;
-                                                  } else {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
-                                                            backgroundColor:
-                                                                Colors.black,
-
-                                                            // shape: RoundedRectangleBorder(
-                                                            //   borderRadius: BorderRadius.circular(6),
-                                                            //   side: const BorderSide(color: Colors.yellow),
-                                                            // ),
-                                                            title: const Text(
-                                                              "Ошибка",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                            content: const Text(
-                                                              "Проблемы сервера",
-                                                            ),
-                                                            actions: [
-                                                              Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            16,
-                                                                        right:
-                                                                            16,
-                                                                        bottom:
-                                                                            16),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      width:
-                                                                          130,
-                                                                      child: ElevatedButton(
-                                                                          onPressed: () {
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          child: const Text("Ок")),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        });
-                                                  }
-                                                  return;
-                                                },
-                                                child: const Text("Да")),
-                                          ),
-                                          const Spacer(),
-                                          SizedBox(
-                                            width: 130,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.black,
-                                                    onPrimary: Colors.yellow,
-                                                    side: const BorderSide(
-                                                        width: 2.0,
-                                                        color: Colors.yellow)),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  return;
-                                                },
-                                                child: const Text('Нет')),
-                                          )
-                                        ],
+                                    // shape: RoundedRectangleBorder(
+                                    //   borderRadius: BorderRadius.circular(6),
+                                    //   side: const BorderSide(color: Colors.yellow),
+                                    // ),
+                                    title: const Text(
+                                      "Уведомление",
+                                      style: TextStyle(
+                                        color: Colors.white,
                                       ),
                                     ),
-                                  ],
-                                );
-                              });
-                        },
-                        child: const Text("Удалить карту"),
-                      ))
+                                    content: const Text(
+                                      "Вы точно хотите удалить карту?",
+                                    ),
+                                    actions: [
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 16, right: 16, bottom: 16),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 130,
+                                              child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    var result =
+                                                        await InternetEngine()
+                                                            .deleteBankCard(
+                                                                bankCard);
+                                                    if (result == true) {
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(context);
+                                                      return;
+                                                    } else {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              backgroundColor:
+                                                                  Colors.black,
+
+                                                              // shape: RoundedRectangleBorder(
+                                                              //   borderRadius: BorderRadius.circular(6),
+                                                              //   side: const BorderSide(color: Colors.yellow),
+                                                              // ),
+                                                              title: const Text(
+                                                                "Ошибка",
+                                                                style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                              content: const Text(
+                                                                "Проблемы сервера",
+                                                              ),
+                                                              actions: [
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              16,
+                                                                          right:
+                                                                              16,
+                                                                          bottom:
+                                                                              16),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            130,
+                                                                        child: ElevatedButton(
+                                                                            onPressed: () {
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                            child: const Text("Ок")),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          });
+                                                    }
+                                                    return;
+                                                  },
+                                                  child: const Text("Да")),
+                                            ),
+                                            const Spacer(),
+                                            SizedBox(
+                                              width: 130,
+                                              child: ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                      primary: Colors.black,
+                                                      onPrimary: Colors.yellow,
+                                                      side: const BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.yellow)),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    return;
+                                                  },
+                                                  child: const Text('Нет')),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: const Text("Удалить карту"),
+                        )),
+                  visible: deleteVisibility,)
                 ]));
           });
         });
@@ -451,5 +578,6 @@ class BankCardModalBottomSheet {
     bankCardNumberController.text = bankCard.numberBankCard;
     selectDate = bankCard.cardDate;
     bankCardCVCController.text = bankCard.cardCvc.toString();
+    bankCardDateController.text = bankCard.cardDate;
   }
 }

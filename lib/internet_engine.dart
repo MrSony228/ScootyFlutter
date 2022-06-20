@@ -97,7 +97,7 @@ class InternetEngine {
     }
   }
 
-  Future<Transport> getTransportByQrCode(String qrCode) async {
+  Future<Transport?> getTransportByQrCode(String qrCode) async {
     String token = "";
     await LocalStorage().getToken().then((String result) {
       token = result;
@@ -110,6 +110,9 @@ class InternetEngine {
           'Content-Type': "application/json; charset=UTF-8",
           'x-auth-token': token
         });
+    if (response.statusCode == 500) {
+      return null;
+    }
     return Transport.fromJson(jsonDecode(response.body));
   }
 

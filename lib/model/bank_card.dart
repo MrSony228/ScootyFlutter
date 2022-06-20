@@ -15,7 +15,7 @@ part 'bank_card.g.dart';
 });
 
   late String numberBankCard;
-  late DateTime cardDate;
+  late String cardDate;
   late int cardCvc;
   late int userId;
 

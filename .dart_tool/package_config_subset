@@ -334,6 +334,10 @@ pubspec_parse
 2.14
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-1.2.0/lib/
+rxdart
+2.12
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.4/lib/
 shared_preferences
 2.14
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.15/
@@ -390,6 +394,10 @@ stack_trace
 2.12
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib/
+stop_watch_timer
+2.16
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/stop_watch_timer-1.5.0/
+file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/stop_watch_timer-1.5.0/lib/
 stream_channel
 2.12
 file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/

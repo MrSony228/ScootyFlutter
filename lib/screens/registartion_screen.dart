@@ -62,7 +62,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 20,
               ),
               ScootyTextField("scooty@gmail.com", emailController,
-                  MaskTextInputFormatter()),
+                  MaskTextInputFormatter(), TextInputType.text),
               const SizedBox(
                 height: 20,
               ),
@@ -120,7 +120,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иванов", firstNameController, MaskTextInputFormatter()),
+                        ScootyTextField("Иванов", firstNameController, MaskTextInputFormatter(), TextInputType.text),
                       ],
                     ),
                   ),
@@ -141,7 +141,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иван", lastNameController, MaskTextInputFormatter()),
+                        ScootyTextField("Иван", lastNameController, MaskTextInputFormatter(), TextInputType.text),
                       ],
                     ),
                   ),
@@ -166,7 +166,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       const  SizedBox(
                           height: 20,
                         ),
-                        ScootyTextField("Иванович", middleNameController, MaskTextInputFormatter()),
+                        ScootyTextField("Иванович", middleNameController, MaskTextInputFormatter(), TextInputType.text),
                       ],
                     ),
                   ),
@@ -217,7 +217,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                                     initialDate: selectDate,
                                     firstDate: DateTime(1940, 8),
-                                    lastDate: DateTime(2110),
+                                    lastDate: DateTime.now(),
+                                    initialEntryMode: DatePickerEntryMode.calendarOnly,
                                   );
                                   if (picked != null && picked != selectDate) {
                                     setState(() {

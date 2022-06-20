@@ -6,14 +6,16 @@ class ScootyTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final MaskTextInputFormatter maskFormater;
+  final TextInputType textInputType;
 
 
-  const ScootyTextField(this.hint, this.controller, this.maskFormater);
+  const ScootyTextField(this.hint, this.controller, this.maskFormater, this.textInputType);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: textInputType,
       inputFormatters: [maskFormater],
       style: const TextStyle(color: Colors.black, fontSize: 17),
       textAlignVertical: TextAlignVertical.center,

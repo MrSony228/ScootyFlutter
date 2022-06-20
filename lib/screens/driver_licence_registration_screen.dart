@@ -69,7 +69,7 @@ class _DriverLicenseRegistrationScreenState
                   MaskTextInputFormatter(
                       mask: '####',
                       filter: {"#": RegExp(r'[0-9]')},
-                      type: MaskAutoCompletionType.lazy)),
+                      type: MaskAutoCompletionType.lazy), TextInputType.number),
               const SizedBox(
                 height: 20,
               ),
@@ -95,7 +95,7 @@ class _DriverLicenseRegistrationScreenState
                             MaskTextInputFormatter(
                                 mask: '######',
                                 filter: {"#": RegExp(r'[0-9]')},
-                                type: MaskAutoCompletionType.lazy)),
+                                type: MaskAutoCompletionType.lazy), TextInputType.number),
                       ],
                     ),
                   ),
@@ -145,7 +145,8 @@ class _DriverLicenseRegistrationScreenState
                                     ),
                                     initialDate: selectDate,
                                     firstDate: DateTime(1940, 8),
-                                    lastDate: DateTime(2110),
+                                    lastDate: DateTime.now(),
+                                    initialEntryMode: DatePickerEntryMode.calendarOnly,
                                   );
                                   if (picked != null && picked != selectDate) {
                                     setState(() {
@@ -188,7 +189,7 @@ class _DriverLicenseRegistrationScreenState
                   MaskTextInputFormatter(
                       mask: '####',
                       filter: {"#": RegExp(r'[0-9]')},
-                      type: MaskAutoCompletionType.lazy)),
+                      type: MaskAutoCompletionType.lazy), TextInputType.number),
               const SizedBox(
                 height: 20,
               ),

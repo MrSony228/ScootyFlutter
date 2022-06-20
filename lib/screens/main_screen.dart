@@ -13,6 +13,7 @@ import 'package:scooty/screens/qr-code_scanner.dart';
 import 'package:scooty/widgets/filter_modal_bottom_sheet.dart';
 import 'package:scooty/widgets/map_handler.dart';
 import 'package:scooty/widgets/menu_modal_bottom_sheet.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../model/bank_card.dart';
 import '../model/parking_places.dart';
 import '../model/return_menu.dart';
@@ -109,12 +110,20 @@ class _MainScreenState extends State<MainScreen> {
       latitude: 0,
       longitude: 0);
 
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(); // Create instance.
+
   @override
   void initState() {
     super.initState();
     setTransportOfParking().then((result) {
       if (result = false) {}
     });
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();  // Need to call dispose function.
   }
 
   @override
@@ -508,8 +517,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                         onPressed: () {
                                                                                           BankCard bankCard = BankCard(
                                                                                               numberBankCard: "",
-                                                                                              cardDate: DateTime
-                                                                                                  .now(),
+                                                                                              cardDate: "",
                                                                                               cardCvc: 0,
                                                                                               userId: 0);
                                                                                           Navigator
@@ -559,6 +567,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                 else {
                                                                   Navigator.pop(
                                                                       context);
+
                                                                   showModalBottomSheet(
                                                                       shape: RoundedRectangleBorder(
                                                                         borderRadius: BorderRadius
@@ -571,10 +580,15 @@ class _MainScreenState extends State<MainScreen> {
                                                                       context: context,
                                                                       builder: (
                                                                           context) {
-                                                                        return StatefulBuilder(
+                                                                        _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+                                                                        return StreamBuilder<int>(
+                                                                            stream: _stopWatchTimer.rawTime,
+                                                                            initialData: 0,
                                                                             builder: (
                                                                                 context,
-                                                                                setModalState) {
+                                                                                snap) {
+                                                                              final value = snap.data;
+                                                                              final displayTime = StopWatchTimer.getDisplayTime(value!);
                                                                               return Container(
                                                                                   padding: const EdgeInsets
                                                                                       .only(
@@ -660,19 +674,19 @@ class _MainScreenState extends State<MainScreen> {
                                                                                                           height: 8,
                                                                                                         ),
                                                                                                         Row(
-                                                                                                          children: const [
-                                                                                                            Icon(
+                                                                                                          children:  [
+                                                                                                           const Icon(
                                                                                                               MdiIcons
                                                                                                                   .clockTimeThreeOutline,
                                                                                                               color: Colors
                                                                                                                   .yellow,
                                                                                                             ),
-                                                                                                            SizedBox(
+                                                                                                          const  SizedBox(
                                                                                                               width: 4,
                                                                                                             ),
                                                                                                             Text(
-                                                                                                              "1:00",
-                                                                                                              style: TextStyle(
+                                                                                                              displayTime.substring(1,8),
+                                                                                                              style: const TextStyle(
                                                                                                                   fontFamily:
                                                                                                                   ""),
                                                                                                             )
@@ -767,7 +781,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                                         height: 202,
                                                                                                         child: Image
                                                                                                             .asset(
-                                                                                                            'assets/images/electric scooter profile view 2.png')),
+                                                                                                            'assets/images/electric scooter profile view 2.png', alignment: Alignment.centerLeft,)),
                                                                                                     const SizedBox(
                                                                                                       height: 22,
                                                                                                     ),
@@ -783,6 +797,42 @@ class _MainScreenState extends State<MainScreen> {
                                                                                                                 color: Colors
                                                                                                                     .yellow)),
                                                                                                         onPressed: () async {
+                                                                                                          _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                                                                                                          var time = displayTime.substring(2,5);
+                                                                                                          var time1 = displayTime.substring(5,8);
+                                                                                                          if(time[0] == "0"|| time[0] == ":"){
+                                                                                                            time = time.substring(1,time.length);
+                                                                                                          }
+                                                                                                          if(time1[0] == "0"|| time1[0] == ":"){
+                                                                                                            time1 =time1.substring(1,time1.length);
+                                                                                                          }
+                                                                                                          var timeResult = (int.parse(time)*60) + int.parse(time1);
+                                                                                                          var price = selectTransport.price /60;
+                                                                                                          var result = timeResult * price;
+                                                                                                         await showDialog(
+                                                                                                              context: context,
+                                                                                                              builder: (context) {
+                                                                                                                return AlertDialog(
+                                                                                                                  backgroundColor: Colors.black,
+                                                                                                                  title: const Text(
+                                                                                                                    "Уведомление",
+                                                                                                                    style: TextStyle(
+                                                                                                                      color: Colors.white,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  content: Text(
+                                                                                                                    "Ваша поездка стоила: "+ result.toStringAsFixed(2) + " рублей",
+                                                                                                                  ),
+                                                                                                                  actions: [
+                                                                                                                    ElevatedButton(
+                                                                                                                        onPressed: () {
+                                                                                                                          Navigator.pop(context);
+                                                                                                                        },
+                                                                                                                        child: const Text("Закрыть"))
+                                                                                                                  ],
+                                                                                                                );
+                                                                                                              });
+                                                                                                          _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
                                                                                                           Navigator
                                                                                                               .pop(
                                                                                                               context);
