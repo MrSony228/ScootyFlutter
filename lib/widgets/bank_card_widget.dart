@@ -19,12 +19,13 @@ class BankCardModalBottomSheet {
   TextEditingController bankCardNumberController = TextEditingController();
   TextEditingController bankCardCVCController = TextEditingController();
   TextEditingController bankCardDateController = TextEditingController();
+  TextEditingController bankCardNameController = TextEditingController();
   String selectDate = "";
   bool deleteVisibility = true;
 
   void show() async {
-    if(isEmpty == true){
-      deleteVisibility =false;
+    if (isEmpty == true) {
+      deleteVisibility = false;
     }
     if (isEmpty == false) {
       fillBankCard(bankCard);
@@ -95,26 +96,31 @@ class BankCardModalBottomSheet {
                         ),
                         Row(children: [
                           SizedBox(
-                            width: 170,
+                            width: 185,
                             child: ScootyTextField(
-                                "4276 5900 1776 3508",
+                                "0000 0000 0000 0000",
                                 bankCardNumberController,
                                 MaskTextInputFormatter(
                                     mask: '#### #### #### ####',
                                     filter: {"#": RegExp(r'[0-9]')},
-                                    type: MaskAutoCompletionType.lazy), TextInputType.number),
+                                    type: MaskAutoCompletionType.lazy),
+                                TextInputType.number),
                           ),
                           const Spacer(),
                           SizedBox(
                             height: 48,
                             width: 115,
                             child: ScootyTextField(
-                                "06/26",
+                                "00/00",
                                 bankCardDateController,
                                 MaskTextInputFormatter(
                                     mask: '*#/##',
-                                    filter: {"#": RegExp(r'[0-9]'), "*": RegExp(r'[0-1]')},
-                                    type: MaskAutoCompletionType.lazy), TextInputType.number),
+                                    filter: {
+                                      "#": RegExp(r'[0-9]'),
+                                      "*": RegExp(r'[0-1]')
+                                    },
+                                    type: MaskAutoCompletionType.lazy),
+                                TextInputType.number),
                           ),
                         ]),
                         const SizedBox(
@@ -123,53 +129,60 @@ class BankCardModalBottomSheet {
                         Row(
                           children: [
                             Container(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(user.firstName + " " + user.lastName,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontFamily: 'Cera-Pro',
-                                      fontWeight: FontWeight.bold)),
-                            ),
+                                alignment: Alignment.bottomLeft,
+                                child: SizedBox(
+                                  height: 48,
+                                  width: 185,
+                                  child: ScootyTextField(
+                                      'Владелец карты',
+                                      bankCardNameController,
+                                      MaskTextInputFormatter(),
+                                      TextInputType.text),
+                                )),
                             const Spacer(),
                             SizedBox(
-                              width: 45,
-                              child:
-
-                              TextField(
-                                controller: bankCardCVCController,
-                                obscureText: true,
-                                enableSuggestions: false,
-                                autocorrect: false,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [ MaskTextInputFormatter(
-                                  mask: '###',
-                                  filter: {"#": RegExp(r'[0-9]')},
-                                  type: MaskAutoCompletionType.lazy)],
-                                style: const TextStyle(color: Colors.black, fontSize: 17),
-                                textAlignVertical: TextAlignVertical.center,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
+                                width: 45,
+                                child: TextField(
+                                  controller: bankCardCVCController,
+                                  obscureText: true,
+                                  enableSuggestions: false,
+                                  autocorrect: false,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    MaskTextInputFormatter(
+                                        mask: '###',
+                                        filter: {"#": RegExp(r'[0-9]')},
+                                        type: MaskAutoCompletionType.lazy)
+                                  ],
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 17),
+                                  textAlignVertical: TextAlignVertical.center,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(7.0),
+                                        borderSide: const BorderSide(
+                                            color: Colors.white)),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
                                       borderRadius: BorderRadius.circular(7.0),
-                                      borderSide: const BorderSide(color: Colors.white)),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(7.0),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                      borderRadius: BorderRadius.circular(7.0),
+                                    ),
+                                    hintText: '000',
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 15),
+                                    hintStyle: const TextStyle(
+                                      fontSize: 17,
+                                    ),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide:const BorderSide(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(7.0),
-                                  ),
-                                  hintText: '123',
-                                  contentPadding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
-                                  hintStyle: const TextStyle(
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              )
-                            ),
+                                )),
                           ],
                         )
                       ],
@@ -187,9 +200,10 @@ class BankCardModalBottomSheet {
                               side: const BorderSide(
                                   width: 2.0, color: Colors.yellow)),
                           onPressed: () async {
-                            if(bankCardNumberController.text.isEmpty||
-                            bankCardDateController.text.isEmpty||
-                            bankCardDateController.text.isEmpty){
+                            if (bankCardNumberController.text.isEmpty ||
+                                bankCardDateController.text.isEmpty ||
+                                bankCardDateController.text.isEmpty ||
+                                bankCardNameController.text.isEmpty) {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -215,34 +229,33 @@ class BankCardModalBottomSheet {
                                   });
                               return;
                             }
-                            if(bankCardNumberController.text.length < 13)
-                              {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        backgroundColor: Colors.black,
-                                        title: const Text(
-                                          "Ошибка",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
+                            if (bankCardNumberController.text.length < 13) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: Colors.black,
+                                      title: const Text(
+                                        "Ошибка",
+                                        style: TextStyle(
+                                          color: Colors.white,
                                         ),
-                                        content: const Text(
-                                          "Номер карты введен неверно",
-                                        ),
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text("Закрыть"))
-                                        ],
-                                      );
-                                    });
-                                return;
-                              }
-                            if(bankCardDateController.text.length < 5 ){
+                                      ),
+                                      content: const Text(
+                                        "Номер карты введен неверно",
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Закрыть"))
+                                      ],
+                                    );
+                                  });
+                              return;
+                            }
+                            if (bankCardDateController.text.length < 5) {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -268,8 +281,9 @@ class BankCardModalBottomSheet {
                                   });
                               return;
                             }
-                            var month = int.parse(bankCardDateController.text.substring(0,2));
-                            if(month > 12){
+                            var month = int.parse(
+                                bankCardDateController.text.substring(0, 2));
+                            if (month > 12) {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -295,7 +309,7 @@ class BankCardModalBottomSheet {
                                   });
                               return;
                             }
-                            if(bankCardCVCController.text.length < 3){
+                            if (bankCardCVCController.text.length < 3) {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -327,6 +341,7 @@ class BankCardModalBottomSheet {
                               bankCard.cardDate = bankCardDateController.text;
                               bankCard.numberBankCard =
                                   bankCardNumberController.text;
+                              bankCard.cardName = bankCardNameController.text;
                               bool result =
                                   await InternetEngine().editBankCard(bankCard);
                               if (result == true) {
@@ -382,6 +397,7 @@ class BankCardModalBottomSheet {
                               bankCard.cardDate = bankCardDateController.text;
                               bankCard.numberBankCard =
                                   bankCardNumberController.text;
+                              bankCard.cardName = bankCardNameController.text;
                               bool result =
                                   await InternetEngine().addBankCards(bankCard);
                               if (result == true) {
@@ -499,25 +515,24 @@ class BankCardModalBottomSheet {
                                                               // ),
                                                               title: const Text(
                                                                 "Ошибка",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                 ),
                                                               ),
-                                                              content: const Text(
+                                                              content:
+                                                                  const Text(
                                                                 "Проблемы сервера",
                                                               ),
                                                               actions: [
                                                                 Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .only(
-                                                                          left:
-                                                                              16,
-                                                                          right:
-                                                                              16,
-                                                                          bottom:
-                                                                              16),
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 16,
+                                                                      right: 16,
+                                                                      bottom:
+                                                                          16),
                                                                   child: Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -547,12 +562,16 @@ class BankCardModalBottomSheet {
                                             SizedBox(
                                               width: 130,
                                               child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      primary: Colors.black,
-                                                      onPrimary: Colors.yellow,
-                                                      side: const BorderSide(
-                                                          width: 2.0,
-                                                          color: Colors.yellow)),
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors.black,
+                                                          onPrimary:
+                                                              Colors.yellow,
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 2.0,
+                                                                  color: Colors
+                                                                      .yellow)),
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                     return;
@@ -568,7 +587,8 @@ class BankCardModalBottomSheet {
                           },
                           child: const Text("Удалить карту"),
                         )),
-                  visible: deleteVisibility,)
+                    visible: deleteVisibility,
+                  )
                 ]));
           });
         });
@@ -579,5 +599,6 @@ class BankCardModalBottomSheet {
     selectDate = bankCard.cardDate;
     bankCardCVCController.text = bankCard.cardCvc.toString();
     bankCardDateController.text = bankCard.cardDate;
+    bankCardNameController.text = bankCard.cardName;
   }
 }

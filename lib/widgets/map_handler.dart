@@ -332,7 +332,34 @@ class MapHandler extends StatelessWidget {
                                       height: 22,
                                     ),
                                     ElevatedButton(
-                                        onPressed: () {
+                                        onPressed: () async{
+                                          var result = await InternetEngine().editFreeTransport(transport[0].id, false);
+                                          if(result == false){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    backgroundColor: Colors.black,
+                                                    title: const Text(
+                                                      "Ошибка",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    content: const Text(
+                                                      "Не удалось забронировать транспорт",
+                                                    ),
+                                                    actions: [
+                                                      ElevatedButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: const Text("Закрыть"))
+                                                    ],
+                                                  );
+                                                });
+                                            return;
+                                          }
                                           Navigator.pop(context);
                                           showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
@@ -702,7 +729,7 @@ class MapHandler extends StatelessWidget {
                                                                                                                           width: 130,
                                                                                                                           child: ElevatedButton(
                                                                                                                               onPressed: () {
-                                                                                                                                BankCard bankCard = BankCard(numberBankCard: "", cardDate: "", cardCvc: 0, userId: 0);
+                                                                                                                                BankCard bankCard = BankCard(numberBankCard: "", cardDate: "", cardCvc: 0, userId: 0, cardName: "");
                                                                                                                                 Navigator.pop(context);
                                                                                                                                 BankCardModalBottomSheet(context, bankCard, user!, true).show();
                                                                                                                                 return;
@@ -950,9 +977,10 @@ class MapHandler extends StatelessWidget {
                                                                                   .yellow)),
                                                                       onPressed:
                                                                           () async {
+                                                                           await InternetEngine().editFreeTransport(transport[0].id, true);
                                                                         Navigator.pop(
                                                                             context);
-                                                                        //  parking = (await MapHandler(mapController, parking).setTransport(_maxDist, _batteryLevel))!;
+                                                                       // parking = (await MapHandler(mapController, parking).setTransport(30, 500))!;
                                                                         return;
                                                                       },
                                                                       child: const Text(

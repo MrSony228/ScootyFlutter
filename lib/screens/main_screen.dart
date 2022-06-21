@@ -519,7 +519,8 @@ class _MainScreenState extends State<MainScreen> {
                                                                                               numberBankCard: "",
                                                                                               cardDate: "",
                                                                                               cardCvc: 0,
-                                                                                              userId: 0);
+                                                                                              userId: 0,
+                                                                                              cardName: "");
                                                                                           Navigator
                                                                                               .pop(
                                                                                               context);

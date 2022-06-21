@@ -11,13 +11,15 @@ part 'bank_card.g.dart';
     required this.numberBankCard,
     required this.cardDate,
     required this.cardCvc,
-    required this.userId
+    required this.userId,
+    required this.cardName
 });
 
   late String numberBankCard;
   late String cardDate;
   late int cardCvc;
   late int userId;
+  late String cardName;
 
   factory BankCard.fromJson(Map<String, dynamic> data) =>
       _$BankCardFromJson(data);

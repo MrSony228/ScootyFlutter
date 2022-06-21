@@ -50,7 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
              const SizedBox(
                 height: 20,
               ),
-              Text("Привет", style: Theme.of(context).textTheme.subtitle1),
+              Text("Добро пожаловать", style: Theme.of(context).textTheme.subtitle1),
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(

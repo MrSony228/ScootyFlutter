@@ -11,6 +11,7 @@ BankCard _$BankCardFromJson(Map<String, dynamic> json) => BankCard(
       cardDate: json['cardDate'] as String,
       cardCvc: json['cardCvc'] as int,
       userId: json['userId'] as int,
+      cardName: json['cardName'] as String,
     );
 
 Map<String, dynamic> _$BankCardToJson(BankCard instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$BankCardToJson(BankCard instance) => <String, dynamic>{
       'cardDate': instance.cardDate,
       'cardCvc': instance.cardCvc,
       'userId': instance.userId,
+      'cardName': instance.cardName,
     };

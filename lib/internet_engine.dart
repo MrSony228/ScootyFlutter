@@ -9,7 +9,8 @@ import 'model/transport.dart';
 
 // 10.77.41.245
 // 192.168.3.42
-const String localhost = "192.168.3.42";
+// 169.254.74.123
+const String localhost = "169.254.74.123";
 
 class InternetEngine {
   Future<http.Response> basePost(String url, Map<String, dynamic> json) async {
@@ -199,6 +200,27 @@ class InternetEngine {
           'x-auth-token': token,
         },
         body: jsonEncode(bankCard.toJson()));
+    if (response.statusCode != 200) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> editFreeTransport(int id, bool free) async{
+    String token = "";
+    await LocalStorage().getToken().then((String result) {
+      token = result;
+    });
+    http.Response response = await http.put(
+    Uri.http(localhost + ':8080', '/transport/edit-free',{
+      'id': id.toString(),
+      'free': free.toString()
+    }),
+    headers: <String, String>{
+    'Content-Type': "application/json; charset=UTF-8",
+    'x-auth-token': token
+    });
     if (response.statusCode != 200) {
       return false;
     } else {

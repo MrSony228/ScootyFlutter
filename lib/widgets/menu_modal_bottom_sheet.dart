@@ -128,7 +128,8 @@ class MenuModalBottomSheet {
                                                   numberBankCard: "",
                                                   cardDate: "",
                                                   cardCvc: 0,
-                                                  userId: 0);
+                                                  userId: 0,
+                                                  cardName: "");
                                               Navigator.pop(context);
                                               BankCardModalBottomSheet(context,
                                                       bankCard, user, true)
