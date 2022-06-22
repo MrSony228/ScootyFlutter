@@ -546,9 +546,13 @@ class MapHandler extends StatelessWidget {
                                                                   ElevatedButton(
                                                                       onPressed:
                                                                           () async {
+                                                                       await InternetEngine().editFreeTransport(transport[0].id, true);
                                                                         final result = await Navigator.push(
                                                                             context,
                                                                             MaterialPageRoute(builder: (context) => const QrCodeScannerScreen()));
+                                                                        if(selectTransport.id== 0){
+                                                                          return;
+                                                                        }
                                                                         setModalState(
                                                                             () {
                                                                           selectTransport =
@@ -568,6 +572,7 @@ class MapHandler extends StatelessWidget {
                                                                         if (selectTransport.id !=
                                                                             0) {
                                                                           Navigator.pop(context);
+                                                                          await InternetEngine().editFreeTransport(transport[0].id, true);
                                                                           showModalBottomSheet(
                                                                               shape: RoundedRectangleBorder(
                                                                                 borderRadius: BorderRadius.circular(20.0),
@@ -755,7 +760,7 @@ class MapHandler extends StatelessWidget {
                                                                                                             });
                                                                                                       } else {
                                                                                                         Navigator.pop(context);
-
+                                                                                                        await InternetEngine().editFreeTransport(selectTransport.id, false);
                                                                                                         showModalBottomSheet(
                                                                                                             shape: RoundedRectangleBorder(
                                                                                                               borderRadius: BorderRadius.circular(20.0),
@@ -898,6 +903,7 @@ class MapHandler extends StatelessWidget {
                                                                                                                               ElevatedButton(
                                                                                                                                   style: ElevatedButton.styleFrom(primary: Colors.black, onPrimary: Colors.yellow, side: const BorderSide(width: 2.0, color: Colors.yellow)),
                                                                                                                                   onPressed: () async {
+                                                                                                                                    await InternetEngine().editFreeTransport(transport[0].id, true);
                                                                                                                                     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
                                                                                                                                     var time = displayTime.substring(2, 5);
                                                                                                                                     var time1 = displayTime.substring(5, 8);
@@ -990,7 +996,7 @@ class MapHandler extends StatelessWidget {
                                                             ),
                                                           ]));
                                                 });
-                                              });
+                                              }).whenComplete(() => InternetEngine().editFreeTransport(transport[0].id, true));
                                         },
                                         child: const Text(
                                           'Забронировать',

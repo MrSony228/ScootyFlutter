@@ -847,7 +847,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                       ]
                                                                                   ));
                                                                             });
-                                                                      });
+                                                                      }).whenComplete(() => {});
                                                                 }
                                                               },
                                                               child: const Text(

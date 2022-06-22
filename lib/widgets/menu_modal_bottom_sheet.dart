@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scooty/internet_engine.dart';
 import 'package:scooty/model/bank_card.dart';
@@ -9,8 +8,6 @@ import 'package:scooty/model/user_to_register.dart';
 import 'package:scooty/screens/login_screen.dart';
 import 'package:scooty/screens/start_screen.dart';
 import 'package:scooty/widgets/bank_card_widget.dart';
-import 'package:scooty/widgets/scooty_text_field.dart';
-
 import 'dialog_line.dart';
 
 class MenuModalBottomSheet {
@@ -236,7 +233,100 @@ class MenuModalBottomSheet {
                               //   const Spacer(),
                               Expanded(
                                   child: IconButton(
-                                onPressed: () {},
+                                onPressed: () async{
+                                  List<BankCard> result =
+                                      await InternetEngine().getBankCards();
+                                  if (result.isEmpty) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            backgroundColor: Colors.black,
+
+                                            // shape: RoundedRectangleBorder(
+                                            //   borderRadius: BorderRadius.circular(6),
+                                            //   side: const BorderSide(color: Colors.yellow),
+                                            // ),
+                                            title: const Text(
+                                              "Ошибка",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            content: const Text(
+                                              "У вас нет существующих банковских карт, хотите добавить новую?",
+                                            ),
+                                            actions: [
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16,
+                                                    right: 16,
+                                                    bottom: 16),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 130,
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            BankCard bankCard =
+                                                                BankCard(
+                                                                    numberBankCard:
+                                                                        "",
+                                                                    cardDate:
+                                                                        "",
+                                                                    cardCvc: 0,
+                                                                    userId: 0,
+                                                                    cardName:
+                                                                        "");
+                                                            Navigator.pop(
+                                                                context);
+                                                            BankCardModalBottomSheet(
+                                                                    context,
+                                                                    bankCard,
+                                                                    user,
+                                                                    true)
+                                                                .show();
+                                                            return;
+                                                          },
+                                                          child:
+                                                              const Text("Да")),
+                                                    ),
+                                                    const Spacer(),
+                                                    SizedBox(
+                                                      width: 130,
+                                                      child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                              primary:
+                                                                  Colors.black,
+                                                              onPrimary:
+                                                                  Colors.yellow,
+                                                              side: const BorderSide(
+                                                                  width: 2.0,
+                                                                  color: Colors
+                                                                      .yellow)),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            return;
+                                                          },
+                                                          child: const Text(
+                                                              'Нет')),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  } else {
+                                    BankCard bankCard = result[0];
+                                    BankCardModalBottomSheet(
+                                            context, bankCard, user, false)
+                                        .show();
+                                  }
+                                },
                                 icon: const Icon(MdiIcons.arrowRight),
                                 alignment: Alignment.bottomRight,
                               ))
